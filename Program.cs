@@ -6,7 +6,6 @@ using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
 
 namespace THONK{
     class Program{
@@ -28,7 +27,7 @@ namespace THONK{
                 MessageCacheSize = 50
             });
         }
-        private static Task Log(LogMessage msg){
+        public static Task Log(LogMessage msg){
             var cc = Console.ForegroundColor;
             switch (msg.Severity)
             {
@@ -52,9 +51,7 @@ namespace THONK{
             return Task.CompletedTask;
         }
         private async Task MainAsync(){
-            string jsonString = File.ReadAllText("./config.json");
-            dynamic json = JsonConvert.DeserializeObject(jsonString);
-            _token = json.token;
+            _token = Environment.GetEnvironmentVariable("TOKEN");
             _client.Log += Log;
             _client.Ready += _client_ready;
             await InitCommands();

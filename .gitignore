@@ -2,3 +2,6 @@
 /bin
 /obj
 /config.json
+/start.bat
+/start.sh
+/db.sqlite
