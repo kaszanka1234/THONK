@@ -3,7 +3,9 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 
 namespace THONK.Resources.Database{
+    /* create structure of guild record */
     public class Guild {
+        /* primary key */
         [Key]
         public ulong GuildID {get;set;}
         public string Prefix {get;set;}

@@ -8,6 +8,7 @@ using Discord.Commands;
 using THONK.Resources.Database;
 
 namespace THONK.DEV.testCommand{
+    /* test and developments commands won't be commented */
     public class testCommand : ModuleBase<SocketCommandContext>{
         [Command("testCommand"), Summary("Development command")]
         public async Task module(){
