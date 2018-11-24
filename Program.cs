@@ -112,7 +112,7 @@ namespace THONK{
             var Result = await _commands.ExecuteAsync(Context, ArgPos);
             /* log to console if command failed */
             if(!Result.IsSuccess){
-                await Log(new LogMessage(LogSeverity.Error, "cmd hndl", "Cannot execute command"));
+                await Log(new LogMessage(LogSeverity.Error, "cmd handler", Result.ErrorReason));
             }
         }
     }
