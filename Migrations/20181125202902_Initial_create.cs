@@ -2,7 +2,7 @@
 
 namespace THONK.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class Initial_create : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -16,14 +16,7 @@ namespace THONK.Migrations
                     ChannelGeneral = table.Column<ulong>(nullable: false),
                     ChannelAnnouncements = table.Column<ulong>(nullable: false),
                     ChannelBotLog = table.Column<ulong>(nullable: false),
-                    ChannelLog = table.Column<ulong>(nullable: false),
-                    RoleWarlord = table.Column<ulong>(nullable: false),
-                    RoleGeneral = table.Column<ulong>(nullable: false),
-                    RoleLieutenant = table.Column<ulong>(nullable: false),
-                    RoleSergeant = table.Column<ulong>(nullable: false),
-                    RoleSoldier = table.Column<ulong>(nullable: false),
-                    RoleInitiate = table.Column<ulong>(nullable: false),
-                    RoleGuest = table.Column<ulong>(nullable: false)
+                    ChannelLog = table.Column<ulong>(nullable: false)
                 },
                 constraints: table =>
                 {

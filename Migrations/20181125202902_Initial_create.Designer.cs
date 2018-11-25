@@ -8,8 +8,8 @@ using THONK.Resources.Database;
 namespace THONK.Migrations
 {
     [DbContext(typeof(SqliteDbContext))]
-    [Migration("20181124223924_update1")]
-    partial class update1
+    [Migration("20181125202902_Initial_create")]
+    partial class Initial_create
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -31,20 +31,6 @@ namespace THONK.Migrations
                     b.Property<ulong>("ChannelLog");
 
                     b.Property<string>("Prefix");
-
-                    b.Property<ulong>("RoleGeneral");
-
-                    b.Property<ulong>("RoleGuest");
-
-                    b.Property<ulong>("RoleInitiate");
-
-                    b.Property<ulong>("RoleLieutenant");
-
-                    b.Property<ulong>("RoleSergeant");
-
-                    b.Property<ulong>("RoleSoldier");
-
-                    b.Property<ulong>("RoleWarlord");
 
                     b.HasKey("GuildID");
 

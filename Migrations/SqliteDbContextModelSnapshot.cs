@@ -30,20 +30,6 @@ namespace THONK.Migrations
 
                     b.Property<string>("Prefix");
 
-                    b.Property<ulong>("RoleGeneral");
-
-                    b.Property<ulong>("RoleGuest");
-
-                    b.Property<ulong>("RoleInitiate");
-
-                    b.Property<ulong>("RoleLieutenant");
-
-                    b.Property<ulong>("RoleSergeant");
-
-                    b.Property<ulong>("RoleSoldier");
-
-                    b.Property<ulong>("RoleWarlord");
-
                     b.HasKey("GuildID");
 
                     b.ToTable("Guilds");

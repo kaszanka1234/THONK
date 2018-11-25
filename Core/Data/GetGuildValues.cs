@@ -7,12 +7,43 @@ namespace THONK.Core.Data{
         /* get command prefix */
         public static string GetPefix(ulong guildId){
             using (var db = new SqliteDbContext()){
-                String Prefix = db.Guilds.Find(guildId).Prefix;
+                var guild = db.Guilds.Find(guildId);
                 /* if no record is found return default prefix */
-                if(Prefix == null){
+                if(guild == null){
                     return "/";
                 }else{
-                    return Prefix;
+                    return guild.Prefix;
+                }
+            }
+        }
+        public class Channel{
+            /* get general channel */
+            public static ulong General(ulong guildId){
+                using (var db = new SqliteDbContext()){
+                    ulong channel = db.Guilds.Find(guildId).ChannelGeneral;
+                    return channel;
+                }
+            }
+            
+            /* get announcements channel */
+            public static ulong Announcements(ulong guildId){
+                using (var db = new SqliteDbContext()){
+                    ulong channel = db.Guilds.Find(guildId).ChannelAnnouncements;
+                    return channel;
+                }
+            }
+            /* get general channel */
+            public static ulong BotLog(ulong guildId){
+                using (var db = new SqliteDbContext()){
+                    ulong channel = db.Guilds.Find(guildId).ChannelBotLog;
+                    return channel;
+                }
+            }
+            /* get general channel */
+            public static ulong Log(ulong guildId){
+                using (var db = new SqliteDbContext()){
+                    ulong channel = db.Guilds.Find(guildId).ChannelAnnouncements;
+                    return channel;
                 }
             }
         }
