@@ -105,14 +105,14 @@ namespace THONK{
             /* position of command prefix */
             int ArgPos = 0;
             /* command prefix */
-            String Prefix = "?dev";
+            String Prefix = THONK.Core.Data.GetGuildValues.GetPefix(Context.Guild.Id);
             /* return if message doesn't have a prefix */
             if(!Message.HasStringPrefix(Prefix, ref ArgPos))return;
             /* get the result of executed command */
             var Result = await _commands.ExecuteAsync(Context, ArgPos);
             /* log to console if command failed */
             if(!Result.IsSuccess){
-                await Log(new LogMessage(LogSeverity.Error, "cmd handler", Result.ErrorReason));
+                await Log(new LogMessage(LogSeverity.Error, "Command Handler", Result.ErrorReason));
             }
         }
     }
