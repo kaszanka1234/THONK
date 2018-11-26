@@ -2,27 +2,10 @@ using System;
 using System.Threading.Tasks;
 using THONK.Resources.Database;
 
-namespace THONK.Core.Data{
+namespace THONK.Core.Data.GuildValues{
     /* Set values of guild in DB */
-    public class SetGuildValues{
-        /* register guild in DB */
-        public static async Task Register(ulong id = 0, ulong channel = 0){
-            if(id == 0 || channel == 0){
-                throw new Exception("Register requires GuildId and ChannelId");
-            }
-            using(var db = new SqliteDbContext()){
-                Guild guild = new Guild{
-                    GuildID = id,
-                    ChannelGeneral = channel,
-                    Prefix = "/",
-                    ChannelAnnouncements = channel,
-                    ChannelBotLog = 0,
-                    ChannelLog = 0
-                };
-                await db.Guilds.AddAsync(guild);
-                await db.SaveChangesAsync();
-            }
-        }
+    public class Set{
+        
         /* Set guild's command prefix */
         public static async Task Prefix(ulong GuildId, string Prefix){
             /* if no prefix is passed throw exception */

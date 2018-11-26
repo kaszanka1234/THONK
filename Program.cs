@@ -25,7 +25,7 @@ namespace THONK{
         /* run main asynchronous function */
         static void Main(String[] args) => new Program().MainAsync().GetAwaiter().GetResult();
 
-        /* assign values to read only vars */
+        /* Default constructor */
         private Program(){
             /* define client */
             _client = new DiscordSocketClient(new DiscordSocketConfig{
@@ -38,25 +38,37 @@ namespace THONK{
          * LogMessage (Severity :LogSeverity:, Source :string:, Message :string:) */
         public static Task Log(LogMessage msg){
             var cc = Console.ForegroundColor;
+            string LogColor;
             switch (msg.Severity)
             {
                 case LogSeverity.Critical:
                 case LogSeverity.Error:
                     Console.ForegroundColor = ConsoleColor.Red;
+                    LogColor = "[0;31;40m";
                     break;
                 case LogSeverity.Warning:
                     Console.ForegroundColor = ConsoleColor.Yellow;
+                    LogColor = "[1;33;40m";
                     break;
                 case LogSeverity.Info:
                     Console.ForegroundColor = ConsoleColor.White;
+                    LogColor = "[1;37;40m";
                     break;
                 case LogSeverity.Verbose:
                 case LogSeverity.Debug:
                     Console.ForegroundColor = ConsoleColor.DarkGray;
+                    LogColor = "[0;37;40m";
+                    break;
+                default:
+                    LogColor = "[0;37;40m";
                     break;
             }
-            Console.WriteLine($"{DateTime.Now,-19} [{msg.Severity,8}] {msg.Source}: {msg.Message}");
+            string logging = $"{DateTime.Now,-19} [{msg.Severity,8}] {msg.Source}: {msg.Message}";
+            Console.WriteLine(logging);
             Console.ForegroundColor = cc;
+            using (StreamWriter s = new StreamWriter("latest.log",true)){
+                s.WriteLineAsync(LogColor+" "+logging);
+            }
             return Task.CompletedTask;
         }
         /* main program method */
@@ -85,6 +97,14 @@ namespace THONK{
             await _commands.AddModulesAsync(Assembly.GetEntryAssembly());
             /* execute method after recieving message */
             _client.MessageReceived += _client_MessageRecieved;
+            /* execute method after new user joins guild */
+            _client.UserJoined += _client_user_joined;
+            /* execute method after user lefts */
+            _client.UserLeft += _client_user_left;
+            /* execute method after user updated */
+            _client.GuildMemberUpdated += _client_user_updated;
+            /* execute method after editing message */
+            //_client.MessageUpdated += _client_message_updated
         }
 
         /* set rich presence properties */
@@ -105,7 +125,8 @@ namespace THONK{
             /* position of command prefix */
             int ArgPos = 0;
             /* command prefix */
-            String Prefix = THONK.Core.Data.GetGuildValues.GetPefix(Context.Guild.Id);
+            String Prefix = THONK.Core.Data.GuildValues.Get.Pefix(Context.Guild.Id);
+            Prefix = Prefix.ToLower();
             /* return if message doesn't have a prefix */
             if(!Message.HasStringPrefix(Prefix, ref ArgPos))return;
             /* get the result of executed command */
@@ -115,5 +136,35 @@ namespace THONK{
                 await Log(new LogMessage(LogSeverity.Error, "Command Handler", Result.ErrorReason));
             }
         }
+        /* method executed after new user joins */
+        private async Task _client_user_joined(SocketGuildUser User){
+            var Channel = _client.GetChannel(THONK.Core.Data.GuildValues.Get.Channel.General(User.Guild.Id)) as SocketTextChannel;
+            await Channel.SendMessageAsync($"Hello <@{User.Id}>! Welcome on **{User.Guild.Name}** Please remember to read the rules and set your nickname here (right-click your name and 'change nickname') to the same as you use in game");
+            ulong BotLog = THONK.Core.Data.GuildValues.Get.Channel.BotLog(User.Guild.Id);
+            if(!(BotLog==0)){
+                await User.Guild.GetTextChannel(BotLog).SendMessageAsync($"<@{User.Id}> joined");
+            }
+        }
+        /* method executed after user leaves */
+        private async Task _client_user_left(SocketGuildUser User){
+            var Channel = _client.GetChannel(THONK.Core.Data.GuildValues.Get.Channel.General(User.Guild.Id)) as SocketTextChannel;
+            await Channel.SendMessageAsync($"<@{User.Id}> has left\nPress F to pay respects");
+            ulong BotLog = THONK.Core.Data.GuildValues.Get.Channel.BotLog(User.Guild.Id);
+            if(!(BotLog==0)){
+                await User.Guild.GetTextChannel(BotLog).SendMessageAsync($"<@{User.Id}> left");
+            }
+        }
+        /* method executed after user updates */
+        private async Task _client_user_updated(SocketGuildUser OldUser, SocketGuildUser NewUser){
+            if(THONK.Core.Data.GuildValues.Get.Channel.BotLog(NewUser.Guild.Id)==0){
+                throw new Exception("Bot logging is disabled");
+            }
+            throw new NotImplementedException();
+        }
+        /* method executed after user edited message */
+        private async Task _client_message_updated(SocketUserMessage Msg, ISocketMessageChannel Channel){
+            throw new NotImplementedException();
+        }
+
     }
 }

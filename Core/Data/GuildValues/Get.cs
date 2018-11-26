@@ -1,11 +1,11 @@
 using System;
 using THONK.Resources.Database;
 
-namespace THONK.Core.Data{
+namespace THONK.Core.Data.GuildValues{
     /* Get various values about the guild from database */
-    public class GetGuildValues{
+    public class Get{
         /* get command prefix */
-        public static string GetPefix(ulong guildId){
+        public static string Pefix(ulong guildId){
             using (var db = new SqliteDbContext()){
                 var guild = db.Guilds.Find(guildId);
                 /* if no record is found return default prefix */

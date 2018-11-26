@@ -5,3 +5,5 @@
 /start.bat
 /start.sh
 /db.sqlite
+/*.log
+/logs
