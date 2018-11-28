@@ -122,7 +122,7 @@ namespace THONK{
             /* position of command prefix */
             int ArgPos = 0;
             /* command prefix */
-            String Prefix = THONK.Core.Data.GuildValues.Get.Pefix(Context.Guild.Id);
+            string Prefix = THONK.Core.Data.GuildValues.Get.Pefix(Context.Guild.Id);
             Prefix = Prefix.ToLower();
             /* return if message doesn't have a prefix */
             if(!Message.HasStringPrefix(Prefix, ref ArgPos))return;
