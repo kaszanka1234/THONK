@@ -102,10 +102,6 @@ namespace THONK{
             _client.UserJoined += _client_user_joined;
             /* execute method after user lefts */
             _client.UserLeft += _client_user_left;
-            /* execute method after user updated */
-            _client.GuildMemberUpdated += _client_user_updated;
-            /* execute method after editing message */
-            //_client.MessageUpdated += _client_message_updated
         }
 
         /* set rich presence properties */
@@ -156,17 +152,5 @@ namespace THONK{
                 await User.Guild.GetTextChannel(BotLog).SendMessageAsync($"<@{User.Id}> left");
             }
         }
-        /* method executed after user updates */
-        private async Task _client_user_updated(SocketGuildUser OldUser, SocketGuildUser NewUser){
-            if(THONK.Core.Data.GuildValues.Get.Channel.BotLog(NewUser.Guild.Id)==0){
-                throw new Exception("Bot logging is disabled");
-            }
-            throw new NotImplementedException();
-        }
-        /* method executed after user edited message */
-        private async Task _client_message_updated(SocketUserMessage Msg, ISocketMessageChannel Channel){
-            throw new NotImplementedException();
-        }
-
     }
 }
