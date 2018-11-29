@@ -39,7 +39,7 @@ namespace THONK.Core.Moderation{
                 if(!THONK.Core.Data.GuildValues.User.HasRole((User as IGuildUser), "Lieutenant")){
                     await Context.Channel.SendMessageAsync(":x: Insufficiet permissions");
                     return;
-                }else if(THONK.Core.Data.GuildValues.User.HasRole((UserName as IGuildUser), "Initiate")){
+                }else if(!THONK.Core.Data.GuildValues.User.HasRole((UserName as IGuildUser), "Initiate")){
                     await Context.Channel.SendMessageAsync(":x: Cannot perform operation on given user");
                     return;
                 }
