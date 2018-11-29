@@ -25,6 +25,7 @@ namespace THONK.Resources.External{
         public PlainsTime_obj(bool a, string b){
             _isDay = a;
             _timeLeft = b;
+            //
         }
         public bool GetIsDay(){return _isDay;}
         public string GetTimeLeft(){return _timeLeft;}
