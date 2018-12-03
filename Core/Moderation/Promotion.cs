@@ -13,10 +13,10 @@ namespace THONK.Core.Moderation{
         [Command("approve"), Alias("accept"), Summary("Changes user's role from Guest to initiate")]
         public async Task approve(SocketGuildUser UserName){
             var User = Context.User as SocketGuildUser;
-            if(!THONK.Core.Data.GuildValues.User.HasRole((User as IGuildUser), "Sergeant")){
+            if(!THONK.Core.Data.GuildValues.User.HasHigherRole((User as IGuildUser), "Sergeant")){
                 await Context.Channel.SendMessageAsync(":x: Insufficiet permissions");
                 return;
-            }else if(!THONK.Core.Data.GuildValues.User.HasRole((UserName as IGuildUser), "Guest")){
+            }else if(!THONK.Core.Data.GuildValues.User.HasHigherRole((UserName as IGuildUser), "Guest")){
                 await Context.Channel.SendMessageAsync(":x: Cannot perform operation on given user");
                 return;
             }
@@ -36,10 +36,10 @@ namespace THONK.Core.Moderation{
             [Command("soldier"), Summary("Promote to soldier")]
             public async Task soldier(SocketGuildUser UserName){
                 var User = Context.User as SocketGuildUser;
-                if(!THONK.Core.Data.GuildValues.User.HasRole((User as IGuildUser), "Lieutenant")){
+                if(!THONK.Core.Data.GuildValues.User.HasHigherRole((User as IGuildUser), "Lieutenant")){
                     await Context.Channel.SendMessageAsync(":x: Insufficiet permissions");
                     return;
-                }else if(!THONK.Core.Data.GuildValues.User.HasRole((UserName as IGuildUser), "Initiate")){
+                }else if(!THONK.Core.Data.GuildValues.User.HasHigherRole((UserName as IGuildUser), "Initiate")){
                     await Context.Channel.SendMessageAsync(":x: Cannot perform operation on given user");
                     return;
                 }

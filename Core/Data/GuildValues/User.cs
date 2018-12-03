@@ -5,7 +5,7 @@ using Discord.WebSocket;
 
 namespace THONK.Core.Data.GuildValues{
     public class User{
-        public static bool HasRole(IGuildUser user, string LowestRole){
+        public static bool HasHigherRole(IGuildUser user, string LowestRole){
             var roles = user.Guild.Roles.ToArray();
             bool Allowed = false;
             foreach (var role in roles){
