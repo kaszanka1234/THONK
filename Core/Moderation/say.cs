@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
+using Discord.WebSocket;
 
 namespace THONK.Core.Moderation{
     public class Say : ModuleBase<SocketCommandContext>{
@@ -31,6 +32,11 @@ namespace THONK.Core.Moderation{
             await Context.Message.DeleteAsync();
             var channel = Context.Guild.GetTextChannel(THONK.Core.Data.GuildValues.Get.Channel.General(Context.Guild.Id));
             await channel.SendMessageAsync(message);
+        }
+        [Command("w"), Alias("dm", "priv"), Summary("send a DM to user")]
+        public async Task dm(SocketUser user, [Remainder]string message){
+            if(!THONK.Core.Data.GuildValues.User.HasHigherRole((Context.User as IGuildUser), "Warlord"))return;
+            await user.SendMessageAsync(message);
         }
     }
 }
