@@ -31,7 +31,7 @@ namespace THONK{
             /* define client */
             _client = new DiscordSocketClient(new DiscordSocketConfig{
                 /* set logging level (Critical, Error, Warning, Info, Verbose, Debug) */
-                LogLevel = LogSeverity.Debug,
+                LogLevel = LogSeverity.Verbose,
                 MessageCacheSize = 50
             });
         }

@@ -11,10 +11,9 @@ namespace THONK.Core.Moderation{
     public class Embed : ModuleBase<SocketCommandContext>{
         [Command("rules")]
         public async Task Rules(){
-            try{
             //EmbedBuilder[] builders = {new EmbedBuilder(),new EmbedBuilder(),new EmbedBuilder()};
-            EmbedBuilder[] builders = new EmbedBuilder[3];
-            for(int i=0;i<3;i++){
+            EmbedBuilder[] builders = new EmbedBuilder[4];
+            for(int i=0;i<builders.Length;i++){
                 builders[i] = new EmbedBuilder();
             }
             string[] dRules = {
@@ -54,12 +53,13 @@ namespace THONK.Core.Moderation{
                 builders[2].Description += $"**{i+1}.** " + dRules[i] + "\n";
             }
             builders[2].WithColor(0xff00ff);
-            await Context.Channel.SendMessageAsync("As a fallback you can message me with \"rules\" to get rules in text-only format");
-            for(int i=0;i<3;i++){
+            builders[3].WithColor(0xffff00);
+            builders[3].WithTitle("Got any suggestions?");
+            builders[3].WithDescription($"Message {Context.Client.GetUser(333769079569776642).Mention} or post them in suggestions channel");
+            //await Context.Channel.SendMessageAsync("As a fallback you can message me with \"rules\" to get rules in text-only format");
+            for(int i=0;i<builders.Length;i++){
                 await Context.Channel.SendMessageAsync("",false, builders[i]);
-            }
-            }catch(Exception e){
-                Console.WriteLine(e.ToString());
+                await Task.Delay(1000);
             }
         }
         [Command("ranks"), Alias("ranks list", "rank list")]
@@ -68,7 +68,6 @@ namespace THONK.Core.Moderation{
                 await Context.Channel.SendMessageAsync(":x: Insufficient permissions");
                 return;
             }
-            try{
             EmbedBuilder[] builders = new EmbedBuilder[7];
             for(int i=0; i<builders.Length;i++){
                 builders[i] = new EmbedBuilder();
@@ -82,13 +81,20 @@ namespace THONK.Core.Moderation{
             roles[5] = Context.Guild.Roles.Where(x => x.Name == "Initiate").FirstOrDefault();
             roles[6] = Context.Guild.Roles.Where(x => x.Name == "Guest").FirstOrDefault();
             for(int i=0;i<builders.Length;i++){
-                builders[i].WithTitle($"<@{roles[i].Id}>\u200b");
-                builders[i].WithDescription("a");
+                builders[i].WithDescription($"{roles[i].Mention}\n");
+                builders[i].WithColor(roles[i].Color);
             }
-            await Context.Channel.SendMessageAsync("",false,builders[0]);
-        }catch(Exception e){
-            Console.WriteLine(e.ToString());
-        }
+            builders[0].Description += "Leader of the clan, person with all permissions, only warlord can ban from discord server";
+            builders[1].Description += "Administrators of the clan they have almost all permissions, they can kick members out of the clan and construct new dojo rooms";
+            builders[2].Description += "Moderators of the clan they can promote other members and mute in text channels too. If you think you should be promoted, you have trouble changing your nickname or you will be offline for a long time message one of them";
+            builders[3].Description += "People that help maintain the clan, they can recruit new members and queue new research, can also mute members in voice channels. If you want someone added to the clan or you see new research to be done, messeage one of them";
+            builders[4].Description += "Accepted member of the clan";
+            builders[5].Description += "Every new member is assigned the role if initiate, if they are active and obey the rules, they are promoted to rank of soldier in a few days, else they are getting kicked";
+            builders[6].Description += "Friends of the clan that are not in the clan itself";
+            foreach (EmbedBuilder builder in builders){
+                await Context.Channel.SendMessageAsync("",false,builder);
+                await Task.Delay(1000);
+            }
         }
     }
 }
