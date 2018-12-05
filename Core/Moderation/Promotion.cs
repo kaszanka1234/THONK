@@ -54,5 +54,21 @@ namespace THONK.Core.Moderation{
         public class demote : ModuleBase<SocketCommandContext>{
             // TODO
         }
+        [Command("mastery rank"), Alias("mr"), Summary("Set user mr")]
+        public async Task mr(int rank, IGuildUser user = null){
+            if(rank>30 || rank<1){
+                await Context.Channel.SendMessageAsync(":x: Rank must be from 1 to 30");
+                return;
+            }
+            if(user==null){
+                user = Context.User as IGuildUser;
+            }else if(user != Context.User && !User.HasHigherRole(Context.User as IGuildUser, "Lieutenant")){
+                await Context.Channel.SendMessageAsync(":x: Insufficient permissions");
+                return;
+            }
+            await user.RemoveRoleAsync(Context.Guild.Roles.Where(x => x.Name.Contains("MR")).FirstOrDefault());
+            await user.AddRoleAsync(Context.Guild.Roles.Where(x => x.Name == $"MR{rank}").FirstOrDefault());
+            await Context.Channel.SendMessageAsync($"{(user.Nickname==null?user.Username:user.Nickname)} has been assigned MR{rank}");
+        }
     }
 }
