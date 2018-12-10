@@ -39,36 +39,28 @@ namespace THONK{
          * LogMessage (Severity :LogSeverity:, Source :string:, Message :string:) */
         public static Task Log(LogMessage msg){
             var cc = Console.ForegroundColor;
-            string LogColor;
             switch (msg.Severity)
             {
                 case LogSeverity.Critical:
                 case LogSeverity.Error:
                     Console.ForegroundColor = ConsoleColor.Red;
-                    LogColor = "[0;31;40m";
                     break;
                 case LogSeverity.Warning:
                     Console.ForegroundColor = ConsoleColor.Yellow;
-                    LogColor = "[1;33;40m";
                     break;
                 case LogSeverity.Info:
                     Console.ForegroundColor = ConsoleColor.White;
-                    LogColor = "[1;37;40m";
                     break;
                 case LogSeverity.Verbose:
                 case LogSeverity.Debug:
                     Console.ForegroundColor = ConsoleColor.DarkGray;
-                    LogColor = "[0;37;40m";
-                    break;
-                default:
-                    LogColor = "[0;37;40m";
                     break;
             }
             string logging = $"{DateTime.Now,-19} [{msg.Severity,8}] {msg.Source}: {msg.Message}";
             Console.WriteLine(logging);
             Console.ForegroundColor = cc;
             using (StreamWriter s = new StreamWriter("latest.log",true)){
-                s.WriteLineAsync(LogColor+" "+logging);
+                s.WriteLineAsync(logging);
             }
             return Task.CompletedTask;
         }
