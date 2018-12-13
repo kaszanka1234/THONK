@@ -50,7 +50,7 @@ namespace THONK.Core.Moderation{
             builders[1].WithColor(0xff0000);
             builders[2].WithTitle("In game rules");
             for(int i=0;i<gRules.Length;i++){
-                builders[2].Description += $"**{i+1}.** " + dRules[i] + "\n";
+                builders[2].Description += $"**{i+1}.** " + gRules[i] + "\n";
             }
             builders[2].WithColor(0xff00ff);
             builders[3].WithColor(0xffff00);
