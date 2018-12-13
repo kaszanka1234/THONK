@@ -44,7 +44,7 @@ namespace THONK.Core.Moderation{
                 foreach (var role in roles){
                     await user.RemoveRoleAsync(Context.Guild.GetRole(role));
                 }*/
-                await channel.SendMessageAsync($"{user.Mention} has been kicked for being offline for too long");
+                await channel.SendMessageAsync($"{user.Mention} has been kicked for being offline for too long, if you want to rejoin later contact any sergeant or higher");
             }
             
         }
