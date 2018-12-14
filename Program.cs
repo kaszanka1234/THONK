@@ -138,7 +138,7 @@ namespace THONK{
         /* method executed after user leaves */
         private async Task _client_user_left(SocketGuildUser User){
             var Channel = _client.GetChannel(THONK.Core.Data.GuildValues.Get.Channel.General(User.Guild.Id)) as SocketTextChannel;
-            await Channel.SendMessageAsync($"<@{User.Id}> has left\nPress F to pay respects");
+            await Channel.SendMessageAsync($"**{User.Username}** has left\nPress F to pay respects");
             ulong BotLog = THONK.Core.Data.GuildValues.Get.Channel.BotLog(User.Guild.Id);
             if(!(BotLog==0)){
                 await User.Guild.GetTextChannel(BotLog).SendMessageAsync($"<@{User.Id}> left");
