@@ -141,7 +141,7 @@ namespace THONK{
             await Channel.SendMessageAsync($"**{User.Username}** has left\nPress F to pay respects");
             ulong BotLog = THONK.Core.Data.GuildValues.Get.Channel.BotLog(User.Guild.Id);
             if(!(BotLog==0)){
-                await User.Guild.GetTextChannel(BotLog).SendMessageAsync($"<@{User.Id}> left");
+                await User.Guild.GetTextChannel(BotLog).SendMessageAsync($"{User.Mention} **{User.Username}** ({User.Id}) left");
             }
         }
     }
