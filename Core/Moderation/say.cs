@@ -16,7 +16,7 @@ namespace THONK.Core.Moderation{
             await Context.Message.DeleteAsync();
             await Context.Channel.SendMessageAsync(message);
         }
-        [Command("announce"), Summary("Send a message to announcements channel")]
+        [Command("announce"), Summary("Send a message to announcements channel (Lieutenant)")]
         public async Task announce([Remainder]string message){
             if(!THONK.Core.Data.GuildValues.User.HasHigherRole((Context.User as IGuildUser), "Lieutenant")){
                 await Context.Channel.SendMessageAsync(":x: Insufficiet permissions");

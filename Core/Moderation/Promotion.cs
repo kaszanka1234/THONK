@@ -10,7 +10,7 @@ namespace THONK.Core.Moderation{
     [Group("user"), Summary("Changes user's role")]
     public class Promotion : ModuleBase<SocketCommandContext>{
         
-        [Command("approve"), Alias("accept"), Summary("Changes user's role from Guest to initiate")]
+        [Command("approve"), Alias("accept"), Summary("Changes user's role from Guest to initiate (Sergeant)")]
         public async Task approve(SocketGuildUser UserName){
             var User = Context.User as SocketGuildUser;
             if(!THONK.Core.Data.GuildValues.User.HasHigherRole((User as IGuildUser), "Sergeant")){
@@ -33,7 +33,7 @@ namespace THONK.Core.Moderation{
         }
         [Group("promote"), Summary("Promotes user to higher rank")]
         public class Promote : ModuleBase<SocketCommandContext>{
-            [Command("soldier"), Summary("Promote to soldier")]
+            [Command("soldier"), Summary("Promote member to soldier (Lieutenant)")]
             public async Task soldier(SocketGuildUser UserName){
                 var User = Context.User as SocketGuildUser;
                 if(!THONK.Core.Data.GuildValues.User.HasHigherRole((User as IGuildUser), "Lieutenant")){
@@ -69,6 +69,10 @@ namespace THONK.Core.Moderation{
             await user.RemoveRoleAsync(Context.Guild.Roles.Where(x => x.Name.Contains("MR")).FirstOrDefault());
             await user.AddRoleAsync(Context.Guild.Roles.Where(x => x.Name == $"MR{rank}").FirstOrDefault());
             await Context.Channel.SendMessageAsync($"{(user.Nickname==null?user.Username:user.Nickname)} has been assigned MR{rank}");
+        }
+        [Command("mastery rank"), Alias("mr"), Summary("Set user mr")]
+        public async Task mr([Remainder]string str=""){
+            await Context.Channel.SendMessageAsync("You have to specify rank eg. /user mr 15");
         }
     }
 }
