@@ -68,7 +68,7 @@ namespace THONK.Core.Moderation{
                 await Context.Channel.SendMessageAsync(":x: Insufficient permissions");
                 return;
             }
-            EmbedBuilder[] builders = new EmbedBuilder[7];
+            EmbedBuilder[] builders = new EmbedBuilder[8];
             for(int i=0; i<builders.Length;i++){
                 builders[i] = new EmbedBuilder();
             }
