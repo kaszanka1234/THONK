@@ -92,7 +92,7 @@ namespace THONK.Core.Moderation{
             builders[3].Description += "People that help maintain the clan, they can recruit new members and queue new research, can also mute members in voice channels. If you want someone added to the clan or you see new research to be done, messeage one of them";
             builders[4].Description += "Accepted member of the clan";
             builders[5].Description += "Friends of the clan that are not in the clan itself";
-            builders[6].Description += "";
+            builders[6].Description += "Every new member is assigned the role if initiate, if they are active and obey the rules, they are promoted to rank of soldier in a few days, else they are getting kicked";
             builders[7].Description += "Newcommers on the server";
             foreach (EmbedBuilder builder in builders){
                 await Context.Channel.SendMessageAsync("",false,builder);
