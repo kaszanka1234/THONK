@@ -10,18 +10,18 @@ namespace THONK.Core.Moderation{
     [Group("user"), Summary("Changes user's role")]
     public class Promotion : ModuleBase<SocketCommandContext>{
         
-        [Command("approve"), Alias("accept"), Summary("Changes user's role from Guest to initiate (Sergeant)")]
+        [Command("approve"), Alias("accept"), Summary("Changes user's role from Visitor to initiate (Sergeant)")]
         public async Task approve(SocketGuildUser UserName){
             var User = Context.User as SocketGuildUser;
             if(!THONK.Core.Data.GuildValues.User.HasHigherRole((User as IGuildUser), "Sergeant")){
                 await Context.Channel.SendMessageAsync(":x: Insufficiet permissions");
                 return;
-            }else if(!THONK.Core.Data.GuildValues.User.HasHigherRole((UserName as IGuildUser), "Guest")){
+            }else if(!THONK.Core.Data.GuildValues.User.HasHigherRole((UserName as IGuildUser), "Visitor")){
                 await Context.Channel.SendMessageAsync(":x: Cannot perform operation on given user");
                 return;
             }
             await (UserName as IGuildUser).AddRoleAsync(Context.Guild.Roles.Where(x => x.Name == "Initiate").FirstOrDefault());
-            await (UserName as IGuildUser).RemoveRoleAsync(Context.Guild.Roles.Where(x => x.Name == "Guest").FirstOrDefault());
+            await (UserName as IGuildUser).RemoveRoleAsync(Context.Guild.Roles.Where(x => x.Name == "Visitor").FirstOrDefault());
             string UserNickname = (UserName as IGuildUser).Nickname==null?UserName.Username:(UserName as IGuildUser).Nickname;
             string StaffNickname = (Context.User as IGuildUser).Nickname==null?Context.User.Username:(Context.User as IGuildUser).Nickname;
             string message = $"**{UserNickname}** is now a member of the clan!\nWelcome and have fun!";

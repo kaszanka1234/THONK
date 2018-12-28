@@ -39,6 +39,10 @@ namespace THONK.Core.Data.GuildValues{
                         if(role.Name==LowestRole){
                             Allowed = true;
                         }break;
+                    case "Visitor":
+                        if(role.Name==LowestRole){
+                            Allowed = true;
+                        }break;
                     default:
                         break;
                 }

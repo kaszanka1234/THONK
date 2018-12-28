@@ -72,7 +72,7 @@ namespace THONK.Core.Moderation{
             for(int i=0; i<builders.Length;i++){
                 builders[i] = new EmbedBuilder();
             }
-            SocketRole[] roles = new SocketRole[7];
+            SocketRole[] roles = new SocketRole[8];
             roles[0] = Context.Guild.Roles.Where(x => x.Name == "Warlord").FirstOrDefault();
             roles[1] = Context.Guild.Roles.Where(x => x.Name == "General").FirstOrDefault();
             roles[2] = Context.Guild.Roles.Where(x => x.Name == "Lieutenant").FirstOrDefault();
@@ -80,6 +80,8 @@ namespace THONK.Core.Moderation{
             roles[4] = Context.Guild.Roles.Where(x => x.Name == "Soldier").FirstOrDefault();
             roles[5] = Context.Guild.Roles.Where(x => x.Name == "Initiate").FirstOrDefault();
             roles[6] = Context.Guild.Roles.Where(x => x.Name == "Guest").FirstOrDefault();
+            roles[7] = Context.Guild.Roles.Where(x => x.Name == "Visitor").FirstOrDefault();
+            
             for(int i=0;i<builders.Length;i++){
                 builders[i].WithDescription($"{roles[i].Mention}\n");
                 builders[i].WithColor(roles[i].Color);
@@ -91,6 +93,7 @@ namespace THONK.Core.Moderation{
             builders[4].Description += "Accepted member of the clan";
             builders[5].Description += "Every new member is assigned the role if initiate, if they are active and obey the rules, they are promoted to rank of soldier in a few days, else they are getting kicked";
             builders[6].Description += "Friends of the clan that are not in the clan itself";
+            builders[7].Description += "Newcommers on the server";
             foreach (EmbedBuilder builder in builders){
                 await Context.Channel.SendMessageAsync("",false,builder);
                 await Task.Delay(1000);

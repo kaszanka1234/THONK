@@ -130,7 +130,7 @@ namespace THONK{
             var Channel = _client.GetChannel(THONK.Core.Data.GuildValues.Get.Channel.General(User.Guild.Id)) as SocketTextChannel;
             await Channel.SendMessageAsync($"Hello <@{User.Id}>! Welcome on **{User.Guild.Name}** Please remember to read the rules and set your nickname here (right-click your name and 'change nickname') to the same as you use in game");
             ulong BotLog = THONK.Core.Data.GuildValues.Get.Channel.BotLog(User.Guild.Id);
-            await (User as IGuildUser).AddRoleAsync((User as IGuildUser).Guild.Roles.Where(x => x.Name == "Guest").FirstOrDefault());
+            await (User as IGuildUser).AddRoleAsync((User as IGuildUser).Guild.Roles.Where(x => x.Name == "Visitor").FirstOrDefault());
             if(!(BotLog==0)){
                 await User.Guild.GetTextChannel(BotLog).SendMessageAsync($"<@{User.Id}> joined");
             }
