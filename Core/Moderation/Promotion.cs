@@ -88,8 +88,11 @@ namespace THONK.Core.Moderation{
                 await Context.Message.DeleteAsync();
                 var channel = Context.Guild.GetTextChannel(Get.Channel.Announcements(Context.Guild.Id));
                 var roles = user.Roles;
-                foreach (var role in roles){
-                    await user.RemoveRoleAsync(role);
+                Console.WriteLine(roles.ToString());
+                foreach (SocketRole role in roles){
+                    if(role.Name!="@everyone"){
+                        await user.RemoveRoleAsync(role as IRole);
+                    }
                 }
                 await channel.SendMessageAsync($"{user.Mention} has been kicked from clan, if you want to rejoin later contact any sergeant or higher");
             }
