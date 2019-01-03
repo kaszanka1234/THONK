@@ -16,7 +16,7 @@ namespace THONK.Core.Moderation{
             if(!THONK.Core.Data.GuildValues.User.HasHigherRole((User as IGuildUser), "Sergeant")){
                 await Context.Channel.SendMessageAsync(":x: Insufficiet permissions");
                 return;
-            }else if(!THONK.Core.Data.GuildValues.User.HasHigherRole((UserName as IGuildUser), "Visitor")){
+            }else if(!UserName.Roles.Where(x => x.Name=="Visitor").Any() && UserName.Roles.Where(x => x.Name!="@everyone").Any()){
                 await Context.Channel.SendMessageAsync(":x: Cannot perform operation on given user");
                 return;
             }
@@ -74,5 +74,24 @@ namespace THONK.Core.Moderation{
         public async Task mr([Remainder]string str=""){
             await Context.Channel.SendMessageAsync("You have to specify rank eg. /user mr 15");
         }
+        [Command("kick"), Summary("Kick user")]
+            public async Task Kick(SocketGuildUser user, string force=""){
+                if(!User.HasHigherRole(Context.User as IGuildUser, "General")){
+                    await Context.Channel.SendMessageAsync(":x: Insufficient permissions");
+                    return;
+                }
+                if(User.HasHigherRole(user, "Sergeant"))
+                if(user.Roles.Where(x => x.Name=="Inactive").Any() && force!="force"){
+                    await Context.Channel.SendMessageAsync("User is marked as inactive, if you still want to kick them use /user kick @user force");
+                    return;
+                }
+                await Context.Message.DeleteAsync();
+                var channel = Context.Guild.GetTextChannel(Get.Channel.Announcements(Context.Guild.Id));
+                var roles = user.Roles;
+                foreach (var role in roles){
+                    await user.RemoveRoleAsync(role);
+                }
+                await channel.SendMessageAsync($"{user.Mention} has been kicked from clan, if you want to rejoin later contact any sergeant or higher");
+            }
     }
 }

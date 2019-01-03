@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
@@ -39,22 +40,6 @@ namespace THONK.Core.Moderation{
             public async Task Soldier([Remainder]string str=""){
                 await Context.Channel.SendMessageAsync("Correct syntax is /warn inactive soldier @user [days]");
             }
-            [Command("kick"), Summary("Kick user for idlong for too long")]
-            public async Task Kick(SocketGuildUser user){
-                if(!User.HasHigherRole(Context.User as IGuildUser, "General")){
-                    await Context.Channel.SendMessageAsync(":x: Insufficient permissions");
-                    return;
-                }
-                await Context.Message.DeleteAsync();
-                var channel = Context.Guild.GetTextChannel(Get.Channel.Announcements(Context.Guild.Id));
-                /* // broken
-                var roles = (user as IGuildUser).RoleIds;
-                foreach (var role in roles){
-                    await user.RemoveRoleAsync(Context.Guild.GetRole(role));
-                }*/
-                await channel.SendMessageAsync($"{user.Mention} has been kicked for being offline for too long, if you want to rejoin later contact any sergeant or higher");
-            }
-            
         }
     }
 }
