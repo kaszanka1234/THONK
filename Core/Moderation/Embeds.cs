@@ -64,7 +64,7 @@ namespace THONK.Core.Moderation{
         }
         [Command("ranks"), Alias("ranks list", "rank list")]
         public async Task ranks(){
-            if(!User.HasHigherRole(Context.User as IGuildUser, "Warlord")){
+            if(!User.HasHigherRole(Context.User as SocketGuildUser, "Warlord")){
                 await Context.Channel.SendMessageAsync(":x: Insufficient permissions");
                 return;
             }

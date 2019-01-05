@@ -14,7 +14,7 @@ namespace THONK.Core.Moderation{
         public class Offline : ModuleBase<SocketCommandContext>{
             [Command("initiate"), Alias("i"),Summary("Warn an Initiate for idling for too long (lieutenant)")]
             public async Task Inititate(SocketGuildUser user, int days){
-                if(!User.HasHigherRole(Context.User as IGuildUser, "Lieutenant")){
+                if(!User.HasHigherRole(Context.User as SocketGuildUser, "Lieutenant")){
                     await Context.Channel.SendMessageAsync(":x: Insufficient permissions");
                     return;
                 }
@@ -28,7 +28,7 @@ namespace THONK.Core.Moderation{
             }
             [Command("soldier"), Alias("s"),Summary("Warn a Soldier for idling for too long (lieutenant)")]
             public async Task Soldier(SocketGuildUser user, int days){
-                if(!User.HasHigherRole(Context.User as IGuildUser, "Lieutenant")){
+                if(!User.HasHigherRole(Context.User as SocketGuildUser, "Lieutenant")){
                     await Context.Channel.SendMessageAsync(":x: Insufficient permissions");
                     return;
                 }

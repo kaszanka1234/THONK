@@ -13,7 +13,7 @@ namespace THONK.Core.Moderation{
         [Command("approve"), Alias("accept"), Summary("Changes user's role from Visitor to initiate (Sergeant)")]
         public async Task approve(SocketGuildUser UserName){
             var User = Context.User as SocketGuildUser;
-            if(!THONK.Core.Data.GuildValues.User.HasHigherRole((User as IGuildUser), "Sergeant")){
+            if(!THONK.Core.Data.GuildValues.User.HasHigherRole((User as SocketGuildUser), "Sergeant")){
                 await Context.Channel.SendMessageAsync(":x: Insufficiet permissions");
                 return;
             }else if(!UserName.Roles.Where(x => x.Name=="Visitor").Any() && UserName.Roles.Where(x => x.Name!="@everyone").Any()){
@@ -36,10 +36,10 @@ namespace THONK.Core.Moderation{
             [Command("soldier"), Summary("Promote member to soldier (Lieutenant)")]
             public async Task soldier(SocketGuildUser UserName){
                 var User = Context.User as SocketGuildUser;
-                if(!THONK.Core.Data.GuildValues.User.HasHigherRole((User as IGuildUser), "Lieutenant")){
+                if(!THONK.Core.Data.GuildValues.User.HasHigherRole((User as SocketGuildUser), "Lieutenant")){
                     await Context.Channel.SendMessageAsync(":x: Insufficiet permissions");
                     return;
-                }else if(!THONK.Core.Data.GuildValues.User.HasHigherRole((UserName as IGuildUser), "Initiate")){
+                }else if(!THONK.Core.Data.GuildValues.User.HasHigherRole((UserName as SocketGuildUser), "Initiate")){
                     await Context.Channel.SendMessageAsync(":x: Cannot perform operation on given user");
                     return;
                 }
@@ -62,7 +62,7 @@ namespace THONK.Core.Moderation{
             }
             if(user==null){
                 user = Context.User as IGuildUser;
-            }else if(user != Context.User && !User.HasHigherRole(Context.User as IGuildUser, "Lieutenant")){
+            }else if(user != Context.User && !User.HasHigherRole(Context.User as SocketGuildUser, "Lieutenant")){
                 await Context.Channel.SendMessageAsync(":x: Insufficient permissions");
                 return;
             }
@@ -74,27 +74,46 @@ namespace THONK.Core.Moderation{
         public async Task mr([Remainder]string str=""){
             await Context.Channel.SendMessageAsync("You have to specify rank eg. /user mr 15");
         }
-        [Command("kick"), Summary("Kick user")]
-            public async Task Kick(SocketGuildUser user, string force=""){
-                if(!User.HasHigherRole(Context.User as IGuildUser, "General")){
+        [Command("kick"), Summary("Kick")]
+            public async Task Kick(SocketGuildUser user,params string[] args){
+                bool force = false;
+                string reason="";
+                foreach(var arg in args){
+                    if(arg=="-f"){
+                        force=true;
+                    }else{
+                        reason += " "+arg;
+                    }
+                }
+                if(!User.HasHigherRole(Context.User as SocketGuildUser, "General")){
                     await Context.Channel.SendMessageAsync(":x: Insufficient permissions");
                     return;
                 }
-                if(User.HasHigherRole(user, "Sergeant"))
-                if(user.Roles.Where(x => x.Name=="Inactive").Any() && force!="force"){
-                    await Context.Channel.SendMessageAsync("User is marked as inactive, if you still want to kick them use /user kick @user force");
+                if(!User.HasHigherRole(Context.User as SocketGuildUser, "Warlord") && force){
+                    await Context.Channel.SendMessageAsync(":x: Insufficient permissions, only Warlord can do that");
                     return;
                 }
-                await Context.Message.DeleteAsync();
+                if(User.HasHigherRole(user, "Sergeant") && !force){
+                    await Context.Channel.SendMessageAsync("User is member of staff, if you still want to kick them use /user kick @user reason -f");
+                    return;
+                }
+                if(user.Roles.Where(x => x.Name=="Inactive").Any() && !force){
+                    await Context.Channel.SendMessageAsync("User is marked as inactive, if you still want to kick them use /user kick @user reason -f");
+                    return;
+                }
+                //await Context.Message.DeleteAsync();
                 var channel = Context.Guild.GetTextChannel(Get.Channel.Announcements(Context.Guild.Id));
                 var roles = user.Roles;
-                Console.WriteLine(roles.ToString());
                 foreach (SocketRole role in roles){
                     if(role.Name!="@everyone"){
                         await user.RemoveRoleAsync(role as IRole);
                     }
                 }
-                await channel.SendMessageAsync($"{user.Mention} has been kicked from clan, if you want to rejoin later contact any sergeant or higher");
+                await channel.SendMessageAsync($"{user.Mention} has been kicked from clan{(reason==""?"":$" for{reason}")}, if you want to rejoin later contact any sergeant or higher");
+                ulong BotLog = Get.Channel.BotLog(Context.Guild.Id);
+                if(BotLog!=0){
+                    await Context.Guild.GetTextChannel(BotLog).SendMessageAsync($"{user.Mention} was kicked by {Context.User.Mention} for{reason}");
+                }
             }
     }
 }
