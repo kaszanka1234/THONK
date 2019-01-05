@@ -72,7 +72,7 @@ namespace THONK{
             /* subscribe client to logging service */
             _client.Log += Log;
             /* set rich presence properties */
-            _client.Ready += _client_ready;
+            await Task.Run<Task>(() => _update_game());
             /* initialize commands and login as bot */
             await InitCommands();
             await _client.LoginAsync(TokenType.Bot, token);
@@ -97,8 +97,12 @@ namespace THONK{
         }
 
         /* set rich presence properties */
-        private async Task _client_ready(){
-            await _client.SetGameAsync("with async functions", "");
+        private async Task _update_game(){
+            while(true){
+                var cet =await THONK.Resources.External.PlainsTime.time();
+                await _client.SetGameAsync($"{cet.GetMinLeft()}m to {(!cet.GetIsDay()?"day":"night")}, null weather");
+                await Task.Delay(60000);
+            }
         }
 
         /* method executed at recieveing message */
