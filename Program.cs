@@ -100,7 +100,7 @@ namespace THONK{
         private async Task _update_game(){
             while(true){
                 var cet =await THONK.Resources.External.PlainsTime.time();
-                await _client.SetGameAsync($"{cet.GetMinLeft()}m to {(!cet.GetIsDay()?"day":"night")}, null weather");
+                await _client.SetGameAsync($"{cet.GetMinLeft()}m to {(!cet.GetIsDay()?"day":"night")}");
                 await Task.Delay(60000);
             }
         }
