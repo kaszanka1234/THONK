@@ -39,36 +39,28 @@ namespace THONK{
          * LogMessage (Severity :LogSeverity:, Source :string:, Message :string:) */
         public static Task Log(LogMessage msg){
             var cc = Console.ForegroundColor;
-            string LogColor;
             switch (msg.Severity)
             {
                 case LogSeverity.Critical:
                 case LogSeverity.Error:
                     Console.ForegroundColor = ConsoleColor.Red;
-                    LogColor = "[0;31;40m";
                     break;
                 case LogSeverity.Warning:
                     Console.ForegroundColor = ConsoleColor.Yellow;
-                    LogColor = "[1;33;40m";
                     break;
                 case LogSeverity.Info:
                     Console.ForegroundColor = ConsoleColor.White;
-                    LogColor = "[1;37;40m";
                     break;
                 case LogSeverity.Verbose:
                 case LogSeverity.Debug:
                     Console.ForegroundColor = ConsoleColor.DarkGray;
-                    LogColor = "[0;37;40m";
-                    break;
-                default:
-                    LogColor = "[0;37;40m";
                     break;
             }
             string logging = $"{DateTime.Now,-19} [{msg.Severity,8}] {msg.Source}: {msg.Message}";
             Console.WriteLine(logging);
             Console.ForegroundColor = cc;
             using (StreamWriter s = new StreamWriter("latest.log",true)){
-                s.WriteLineAsync(LogColor+" "+logging);
+                s.WriteLineAsync(logging);
             }
             return Task.CompletedTask;
         }
@@ -86,7 +78,7 @@ namespace THONK{
             /* subscribe client to logging service */
             _client.Log += Log;
             /* set rich presence properties */
-            _client.Ready += _client_ready;
+            await Task.Run<Task>(() => _update_game());
             /* initialize commands and login as bot */
             await InitCommands();
             await _client.LoginAsync(TokenType.Bot, token);
@@ -111,8 +103,12 @@ namespace THONK{
         }
 
         /* set rich presence properties */
-        private async Task _client_ready(){
-            await _client.SetGameAsync("with async functions", "");
+        private async Task _update_game(){
+            while(true){
+                var cet =await THONK.Resources.External.PlainsTime.time();
+                await _client.SetGameAsync($"{cet.GetMinLeft()}m to {(!cet.GetIsDay()?"day":"night")}");
+                await Task.Delay(60000);
+            }
         }
 
         /* method executed at recieveing message */
@@ -142,9 +138,9 @@ namespace THONK{
         /* method executed after new user joins */
         private async Task _client_user_joined(SocketGuildUser User){
             var Channel = _client.GetChannel(THONK.Core.Data.GuildValues.Get.Channel.General(User.Guild.Id)) as SocketTextChannel;
-            await Channel.SendMessageAsync($"Hello <@{User.Id}>! Welcome on **{User.Guild.Name}** Please remember to read the rules and set your nickname here (right-click your name and 'change nickname') to the same as you use in game");
+            await Channel.SendMessageAsync($"Hello <@{User.Id}>! Welcome on **{User.Guild.Name}** Please remember to read the rules and set your nickname here (right-click your name and 'change nickname') to the same as your warframe name");
             ulong BotLog = THONK.Core.Data.GuildValues.Get.Channel.BotLog(User.Guild.Id);
-            await (User as IGuildUser).AddRoleAsync((User as IGuildUser).Guild.Roles.Where(x => x.Name == "Guest").FirstOrDefault());
+            await (User as IGuildUser).AddRoleAsync((User as IGuildUser).Guild.Roles.Where(x => x.Name == "Visitor").FirstOrDefault());
             if(!(BotLog==0)){
                 await User.Guild.GetTextChannel(BotLog).SendMessageAsync($"<@{User.Id}> joined");
             }
@@ -152,10 +148,10 @@ namespace THONK{
         /* method executed after user leaves */
         private async Task _client_user_left(SocketGuildUser User){
             var Channel = _client.GetChannel(THONK.Core.Data.GuildValues.Get.Channel.General(User.Guild.Id)) as SocketTextChannel;
-            await Channel.SendMessageAsync($"<@{User.Id}> has left\nPress F to pay respects");
+            await Channel.SendMessageAsync($"**{User.Username}** has left\nPress F to pay respects");
             ulong BotLog = THONK.Core.Data.GuildValues.Get.Channel.BotLog(User.Guild.Id);
             if(!(BotLog==0)){
-                await User.Guild.GetTextChannel(BotLog).SendMessageAsync($"<@{User.Id}> left");
+                await User.Guild.GetTextChannel(BotLog).SendMessageAsync($"{User.Mention} **{User.Username}** ({User.Id}) left");
             }
         }
     }

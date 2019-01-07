@@ -50,7 +50,7 @@ namespace THONK.Core.Moderation{
             builders[1].WithColor(0xff0000);
             builders[2].WithTitle("In game rules");
             for(int i=0;i<gRules.Length;i++){
-                builders[2].Description += $"**{i+1}.** " + dRules[i] + "\n";
+                builders[2].Description += $"**{i+1}.** " + gRules[i] + "\n";
             }
             builders[2].WithColor(0xff00ff);
             builders[3].WithColor(0xffff00);
@@ -64,22 +64,24 @@ namespace THONK.Core.Moderation{
         }
         [Command("ranks"), Alias("ranks list", "rank list")]
         public async Task ranks(){
-            if(!User.HasHigherRole(Context.User as IGuildUser, "Warlord")){
+            if(!User.HasHigherRole(Context.User as SocketGuildUser, "Warlord")){
                 await Context.Channel.SendMessageAsync(":x: Insufficient permissions");
                 return;
             }
-            EmbedBuilder[] builders = new EmbedBuilder[7];
+            EmbedBuilder[] builders = new EmbedBuilder[8];
             for(int i=0; i<builders.Length;i++){
                 builders[i] = new EmbedBuilder();
             }
-            SocketRole[] roles = new SocketRole[7];
+            SocketRole[] roles = new SocketRole[8];
             roles[0] = Context.Guild.Roles.Where(x => x.Name == "Warlord").FirstOrDefault();
             roles[1] = Context.Guild.Roles.Where(x => x.Name == "General").FirstOrDefault();
             roles[2] = Context.Guild.Roles.Where(x => x.Name == "Lieutenant").FirstOrDefault();
             roles[3] = Context.Guild.Roles.Where(x => x.Name == "Sergeant").FirstOrDefault();
             roles[4] = Context.Guild.Roles.Where(x => x.Name == "Soldier").FirstOrDefault();
-            roles[5] = Context.Guild.Roles.Where(x => x.Name == "Initiate").FirstOrDefault();
-            roles[6] = Context.Guild.Roles.Where(x => x.Name == "Guest").FirstOrDefault();
+            roles[5] = Context.Guild.Roles.Where(x => x.Name == "Guest").FirstOrDefault();
+            roles[6] = Context.Guild.Roles.Where(x => x.Name == "Initiate").FirstOrDefault();
+            roles[7] = Context.Guild.Roles.Where(x => x.Name == "Visitor").FirstOrDefault();
+            
             for(int i=0;i<builders.Length;i++){
                 builders[i].WithDescription($"{roles[i].Mention}\n");
                 builders[i].WithColor(roles[i].Color);
@@ -89,8 +91,9 @@ namespace THONK.Core.Moderation{
             builders[2].Description += "Moderators of the clan they can promote other members and mute in text channels too. If you think you should be promoted, you have trouble changing your nickname or you will be offline for a long time message one of them";
             builders[3].Description += "People that help maintain the clan, they can recruit new members and queue new research, can also mute members in voice channels. If you want someone added to the clan or you see new research to be done, messeage one of them";
             builders[4].Description += "Accepted member of the clan";
-            builders[5].Description += "Every new member is assigned the role if initiate, if they are active and obey the rules, they are promoted to rank of soldier in a few days, else they are getting kicked";
-            builders[6].Description += "Friends of the clan that are not in the clan itself";
+            builders[5].Description += "Friends of the clan that are not in the clan itself";
+            builders[6].Description += "Every new member is assigned the role if initiate, if they are active and obey the rules, they are promoted to rank of soldier in a few days, else they are getting kicked";
+            builders[7].Description += "Newcommers on the server";
             foreach (EmbedBuilder builder in builders){
                 await Context.Channel.SendMessageAsync("",false,builder);
                 await Task.Delay(1000);

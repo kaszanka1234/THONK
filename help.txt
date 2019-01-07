@@ -1,0 +1,10 @@
+/plainstime     - get current time on PoE
+/user
+ ╠ mr           - set your mr
+ ╠ promote
+ ║ ╚ soldier    - promote user to soldier (Lieutenant+)
+ ╚ approve      - approve user (Sergeant+)
+/warn
+ ╚ offline
+   ╠ initiate   - warn initiate for idling for too long (Lieutenant+)
+   ╚ soldier    - warn soldier for idling for too long (Lieutenant+)
