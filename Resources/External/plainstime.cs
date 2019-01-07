@@ -11,7 +11,7 @@ namespace THONK.Resources.External{
             DateTime startOffset = new DateTime(2019,1,7,10,45,00);
             TimeSpan cetusCycle = DateTime.Now - startOffset;
             int cycleSeconds = (int)cetusCycle.TotalSeconds%(150*60);
-            if(cycleSeconds<600){
+            if(cycleSeconds<6000){
                 _isDay=true;
                 cycleSeconds=99*60-cycleSeconds;
                 _minLeft=cycleSeconds/60;
