@@ -108,7 +108,7 @@ namespace THONK{
         private async Task _update_game(){
             /* update status each minute */
             while(true){
-                var cet =await THONK.Resources.External.PlainsTime.time();
+                var cet = new THONK.Resources.External.PlainsTime_obj();
                 await _client.SetGameAsync($"{cet.GetMinLeft()}m to {(!cet.GetIsDay()?"day":"night")}");
                 await Task.Delay(60000);
             }

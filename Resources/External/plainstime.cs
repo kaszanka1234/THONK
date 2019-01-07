@@ -3,17 +3,11 @@ using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace THONK.Resources.External{
-    public class PlainsTime{
-        public static async Task<PlainsTime_obj> time(){
-            return new PlainsTime_obj();
-        }
-    }
     public class PlainsTime_obj{
         bool _isDay;
         string _timeLeft;
         int _minLeft;
         public PlainsTime_obj(){
-            _timeLeft="a";
             DateTime startOffset = new DateTime(2019,1,7,10,45,00);
             TimeSpan cetusCycle = DateTime.Now - startOffset;
             int cycleSeconds = (int)cetusCycle.TotalSeconds%(150*60);
