@@ -72,6 +72,12 @@ namespace THONK{
             }
             return Task.CompletedTask;
         }
+
+        /* Overload for logging method */
+        public static Task Log(string msg, LogSeverity s = LogSeverity.Info, string src = "Unkown"){
+            Log(new LogMessage(s,src,msg));
+            return Task.CompletedTask;
+        }
         /* main program method */
         private async Task MainAsync(){
             
@@ -127,7 +133,7 @@ namespace THONK{
             /* return if message doesn't have a prefix */
             if(!Message.HasStringPrefix(Prefix, ref ArgPos))return;
             /* get the result of executed command */
-            var Result = await _commands.ExecuteAsync(Context, ArgPos);
+            var Result = await _commands.ExecuteAsync(Context, ArgPos, _services);
             /* log to console if command failed */
             if(!Result.IsSuccess){
                 await Log(new LogMessage(LogSeverity.Error, "Command Handler", Result.ErrorReason));
