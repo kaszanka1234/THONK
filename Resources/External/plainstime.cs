@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace THONK.Resources.External{
+    /* Calculate time on plains */
     public class PlainsTime_obj{
         bool _isDay;
         string _timeLeft;
