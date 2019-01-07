@@ -32,7 +32,7 @@ namespace THONK{
             _client = new DiscordSocketClient(new DiscordSocketConfig{
                 /* set logging level (Critical, Error, Warning, Info, Verbose, Debug) */
                 LogLevel = LogSeverity.Verbose,
-                MessageCacheSize = 50
+                MessageCacheSize = 100
             });
         }
         /* logging method
@@ -96,6 +96,8 @@ namespace THONK{
             await _commands.AddModulesAsync(Assembly.GetEntryAssembly());
             /* execute method after recieving message */
             _client.MessageReceived += _client_MessageRecieved;
+            _client.MessageDeleted += _client_MessageDeleted;
+            _client.MessageUpdated += _client_MessageUpdated;
             /* execute method after new user joins guild */
             _client.UserJoined += _client_user_joined;
             /* execute method after user lefts */
@@ -104,6 +106,7 @@ namespace THONK{
 
         /* set rich presence properties */
         private async Task _update_game(){
+            /* update status each minute */
             while(true){
                 var cet =await THONK.Resources.External.PlainsTime.time();
                 await _client.SetGameAsync($"{cet.GetMinLeft()}m to {(!cet.GetIsDay()?"day":"night")}");
@@ -135,6 +138,45 @@ namespace THONK{
                 await Log(new LogMessage(LogSeverity.Error, "Command Handler", Result.ErrorReason));
             }
         }
+
+        /* method executed after deleting message */
+        private async Task _client_MessageDeleted(Cacheable<IMessage, ulong> msg, ISocketMessageChannel channel){
+            if(msg.Value.Author.IsBot || msg.Value.Author.IsWebhook)return;
+            // TO-DO return if msg is cmd
+            var logChannelId = THONK.Core.Data.GuildValues.Get.Channel.Log((channel as SocketGuildChannel).Guild.Id);
+            SocketTextChannel log = (channel as SocketTextChannel).Guild.GetTextChannel(logChannelId);
+            if(logChannelId!=0){
+                EmbedBuilder embed = new EmbedBuilder();
+                embed.WithColor(Color.Red);
+                if(!msg.HasValue){
+                    embed.Description = $"Message was deleted in <#{channel.Id}> but i was unable to retrieve it";
+                }else{
+                    embed.Description = msg.Value.ToString();
+                    embed.WithAuthor(msg.Value.Author);
+                }
+                await log.SendMessageAsync($"Message deleted in <#{channel.Id}>", false,embed);
+            }
+        }
+
+        /* method executed after updating message */
+        private async Task _client_MessageUpdated(Cacheable<IMessage, ulong> msg, SocketMessage msgAfter, ISocketMessageChannel channel){
+            if(msg.Value.Author.IsBot || msg.Value.Author.IsWebhook)return;
+            var logChannelId = THONK.Core.Data.GuildValues.Get.Channel.Log((channel as SocketGuildChannel).Guild.Id);
+            SocketTextChannel log = (channel as SocketTextChannel).Guild.GetTextChannel(logChannelId);
+            if(logChannelId!=0){
+                EmbedBuilder embed = new EmbedBuilder();
+                embed.WithColor(Color.LightOrange);
+                if(!msg.HasValue){
+                    embed.Description = $"Message was edited in <#{channel.Id}> but i was unable to retrieve it";
+                }else{
+                    embed.AddField("Before", msg.Value.ToString());
+                    embed.AddField("After", msgAfter.ToString());
+                    embed.WithAuthor(msg.Value.Author);
+                }
+                await log.SendMessageAsync($"Message edited in <#{channel.Id}>", false,embed);
+            }
+        }
+
         /* method executed after new user joins */
         private async Task _client_user_joined(SocketGuildUser User){
             var Channel = _client.GetChannel(THONK.Core.Data.GuildValues.Get.Channel.General(User.Guild.Id)) as SocketTextChannel;
@@ -145,6 +187,7 @@ namespace THONK{
                 await User.Guild.GetTextChannel(BotLog).SendMessageAsync($"<@{User.Id}> joined");
             }
         }
+
         /* method executed after user leaves */
         private async Task _client_user_left(SocketGuildUser User){
             var Channel = _client.GetChannel(THONK.Core.Data.GuildValues.Get.Channel.General(User.Guild.Id)) as SocketTextChannel;
