@@ -32,44 +32,42 @@ namespace THONK{
             _client = new DiscordSocketClient(new DiscordSocketConfig{
                 /* set logging level (Critical, Error, Warning, Info, Verbose, Debug) */
                 LogLevel = LogSeverity.Verbose,
-                MessageCacheSize = 50
+                MessageCacheSize = 100
             });
         }
         /* logging method
          * LogMessage (Severity :LogSeverity:, Source :string:, Message :string:) */
         public static Task Log(LogMessage msg){
             var cc = Console.ForegroundColor;
-            string LogColor;
             switch (msg.Severity)
             {
                 case LogSeverity.Critical:
                 case LogSeverity.Error:
                     Console.ForegroundColor = ConsoleColor.Red;
-                    LogColor = "[0;31;40m";
                     break;
                 case LogSeverity.Warning:
                     Console.ForegroundColor = ConsoleColor.Yellow;
-                    LogColor = "[1;33;40m";
                     break;
                 case LogSeverity.Info:
                     Console.ForegroundColor = ConsoleColor.White;
-                    LogColor = "[1;37;40m";
                     break;
                 case LogSeverity.Verbose:
                 case LogSeverity.Debug:
                     Console.ForegroundColor = ConsoleColor.DarkGray;
-                    LogColor = "[0;37;40m";
-                    break;
-                default:
-                    LogColor = "[0;37;40m";
                     break;
             }
             string logging = $"{DateTime.Now,-19} [{msg.Severity,8}] {msg.Source}: {msg.Message}";
             Console.WriteLine(logging);
             Console.ForegroundColor = cc;
             using (StreamWriter s = new StreamWriter("latest.log",true)){
-                s.WriteLineAsync(LogColor+" "+logging);
+                s.WriteLineAsync(logging);
             }
+            return Task.CompletedTask;
+        }
+
+        /* Overload for logging method */
+        public static Task Log(string msg, LogSeverity s = LogSeverity.Info, string src = "Unkown"){
+            Log(new LogMessage(s,src,msg));
             return Task.CompletedTask;
         }
         /* main program method */
@@ -80,7 +78,7 @@ namespace THONK{
             /* subscribe client to logging service */
             _client.Log += Log;
             /* set rich presence properties */
-            _client.Ready += _client_ready;
+            await Task.Run<Task>(() => _update_game());
             /* initialize commands and login as bot */
             await InitCommands();
             await _client.LoginAsync(TokenType.Bot, token);
@@ -98,6 +96,8 @@ namespace THONK{
             await _commands.AddModulesAsync(Assembly.GetEntryAssembly());
             /* execute method after recieving message */
             _client.MessageReceived += _client_MessageRecieved;
+            _client.MessageDeleted += _client_MessageDeleted;
+            _client.MessageUpdated += _client_MessageUpdated;
             /* execute method after new user joins guild */
             _client.UserJoined += _client_user_joined;
             /* execute method after user lefts */
@@ -105,8 +105,13 @@ namespace THONK{
         }
 
         /* set rich presence properties */
-        private async Task _client_ready(){
-            await _client.SetGameAsync("with async functions", "");
+        private async Task _update_game(){
+            /* update status each minute */
+            while(true){
+                var cet = new THONK.Resources.External.PlainsTime_obj();
+                await _client.SetGameAsync($"{cet.GetMinLeft()}m to {(!cet.GetIsDay()?"day":"night")}");
+                await Task.Delay(60000);
+            }
         }
 
         /* method executed at recieveing message */
@@ -127,29 +132,69 @@ namespace THONK{
             /* return if message doesn't have a prefix */
             if(!Message.HasStringPrefix(Prefix, ref ArgPos))return;
             /* get the result of executed command */
-            var Result = await _commands.ExecuteAsync(Context, ArgPos);
+            var Result = await _commands.ExecuteAsync(Context, ArgPos, _services);
             /* log to console if command failed */
             if(!Result.IsSuccess){
                 await Log(new LogMessage(LogSeverity.Error, "Command Handler", Result.ErrorReason));
             }
         }
+
+        /* method executed after deleting message */
+        private async Task _client_MessageDeleted(Cacheable<IMessage, ulong> msg, ISocketMessageChannel channel){
+            if(msg.Value.Author.IsBot || msg.Value.Author.IsWebhook)return;
+            // TO-DO return if msg is cmd
+            var logChannelId = THONK.Core.Data.GuildValues.Get.Channel.Log((channel as SocketGuildChannel).Guild.Id);
+            SocketTextChannel log = (channel as SocketTextChannel).Guild.GetTextChannel(logChannelId);
+            if(logChannelId!=0){
+                EmbedBuilder embed = new EmbedBuilder();
+                embed.WithColor(Color.Red);
+                if(!msg.HasValue){
+                    embed.Description = $"Message was deleted in <#{channel.Id}> but i was unable to retrieve it";
+                }else{
+                    embed.Description = msg.Value.ToString();
+                    embed.WithAuthor(msg.Value.Author);
+                }
+                await log.SendMessageAsync($"Message deleted in <#{channel.Id}>", false,embed);
+            }
+        }
+
+        /* method executed after updating message */
+        private async Task _client_MessageUpdated(Cacheable<IMessage, ulong> msg, SocketMessage msgAfter, ISocketMessageChannel channel){
+            if(msg.Value.Author.IsBot || msg.Value.Author.IsWebhook)return;
+            var logChannelId = THONK.Core.Data.GuildValues.Get.Channel.Log((channel as SocketGuildChannel).Guild.Id);
+            SocketTextChannel log = (channel as SocketTextChannel).Guild.GetTextChannel(logChannelId);
+            if(logChannelId!=0){
+                EmbedBuilder embed = new EmbedBuilder();
+                embed.WithColor(Color.LightOrange);
+                if(!msg.HasValue){
+                    embed.Description = $"Message was edited in <#{channel.Id}> but i was unable to retrieve it";
+                }else{
+                    embed.AddField("Before", msg.Value.ToString());
+                    embed.AddField("After", msgAfter.ToString());
+                    embed.WithAuthor(msg.Value.Author);
+                }
+                await log.SendMessageAsync($"Message edited in <#{channel.Id}>", false,embed);
+            }
+        }
+
         /* method executed after new user joins */
         private async Task _client_user_joined(SocketGuildUser User){
             var Channel = _client.GetChannel(THONK.Core.Data.GuildValues.Get.Channel.General(User.Guild.Id)) as SocketTextChannel;
-            await Channel.SendMessageAsync($"Hello <@{User.Id}>! Welcome on **{User.Guild.Name}** Please remember to read the rules and set your nickname here (right-click your name and 'change nickname') to the same as you use in game");
+            await Channel.SendMessageAsync($"Hello <@{User.Id}>! Welcome on **{User.Guild.Name}** Please remember to read the rules and set your nickname here (right-click your name and 'change nickname') to the same as your warframe name");
             ulong BotLog = THONK.Core.Data.GuildValues.Get.Channel.BotLog(User.Guild.Id);
-            await (User as IGuildUser).AddRoleAsync((User as IGuildUser).Guild.Roles.Where(x => x.Name == "Guest").FirstOrDefault());
+            await (User as IGuildUser).AddRoleAsync((User as IGuildUser).Guild.Roles.Where(x => x.Name == "Visitor").FirstOrDefault());
             if(!(BotLog==0)){
                 await User.Guild.GetTextChannel(BotLog).SendMessageAsync($"<@{User.Id}> joined");
             }
         }
+
         /* method executed after user leaves */
         private async Task _client_user_left(SocketGuildUser User){
             var Channel = _client.GetChannel(THONK.Core.Data.GuildValues.Get.Channel.General(User.Guild.Id)) as SocketTextChannel;
-            await Channel.SendMessageAsync($"<@{User.Id}> has left\nPress F to pay respects");
+            await Channel.SendMessageAsync($"**{User.Username}** has left\nPress F to pay respects");
             ulong BotLog = THONK.Core.Data.GuildValues.Get.Channel.BotLog(User.Guild.Id);
             if(!(BotLog==0)){
-                await User.Guild.GetTextChannel(BotLog).SendMessageAsync($"<@{User.Id}> left");
+                await User.Guild.GetTextChannel(BotLog).SendMessageAsync($"{User.Mention} **{User.Username}** ({User.Id}) left");
             }
         }
     }

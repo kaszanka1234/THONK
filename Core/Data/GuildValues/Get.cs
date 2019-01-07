@@ -42,7 +42,7 @@ namespace THONK.Core.Data.GuildValues{
             /* get general channel */
             public static ulong Log(ulong guildId){
                 using (var db = new SqliteDbContext()){
-                    ulong channel = db.Guilds.Find(guildId).ChannelAnnouncements;
+                    ulong channel = db.Guilds.Find(guildId).ChannelLog;
                     return channel;
                 }
             }
