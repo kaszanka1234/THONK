@@ -24,10 +24,11 @@ namespace THONK.Core.Moderation{
                 "Usage of excessive caps is prohibited",
                 "Mentioning @everyone, the Moderators or a specific person without proper reason is prohibited.",
                 "Don't post someone's personal information without permission.",
+                "Don't post any material forbidden by international laws",
                 "If you are offline on discord for more than 7 days you can be kicked out of clan. If you can't login for an extended period of time contact any officer or higher.",
                 "Please use the same name that you use in-game. Do not use fake nickname.",
                 "NO advertising of any kind on our Discord server, This includes links to sites that earn you money. Admins decide what is allowed and what is not. DONT asume anything check with an admin first.",
-                "No rules apply to #memes"
+                "No rules apply to #memes, aside from 'Don't post any material forbidden by international laws'"
             };
             string[] gRules = {
                 "All rulles that apply to discord also apply to in game chat",
