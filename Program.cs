@@ -153,6 +153,7 @@ namespace THONK{
                 }else{
                     embed.Description = msg.Value.ToString();
                     embed.WithAuthor(msg.Value.Author);
+                    embed.WithTimestamp(DateTimeOffset.Now);
                 }
                 await log.SendMessageAsync($"Message deleted in <#{channel.Id}>", false,embed);
             }
@@ -172,6 +173,7 @@ namespace THONK{
                     embed.AddField("Before", msg.Value.ToString());
                     embed.AddField("After", msgAfter.ToString());
                     embed.WithAuthor(msg.Value.Author);
+                    embed.WithTimestamp(DateTimeOffset.Now);
                 }
                 await log.SendMessageAsync($"Message edited in <#{channel.Id}>", false,embed);
             }
