@@ -9,8 +9,8 @@ namespace THONK.Resources.External{
         string _timeLeft;
         int _minLeft;
         public PlainsTime_obj(){
-            DateTime startOffset = new DateTime(2019,1,7,10,45,00);
-            TimeSpan cetusCycle = DateTime.Now - startOffset;
+            DateTime startOffset = new DateTime(2019,1,7,9,45,00);
+            TimeSpan cetusCycle = DateTime.UtcNow - startOffset;
             int cycleSeconds = (int)cetusCycle.TotalSeconds%(150*60);
             if(cycleSeconds<6000){
                 _isDay=true;
