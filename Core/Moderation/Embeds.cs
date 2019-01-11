@@ -19,6 +19,7 @@ namespace THONK.Core.Moderation{
             string[] dRules = {
                 "Be respectful.",
                 "Sending/Linking any harmful material such as viruses, IP grabbers or harmware results in an immediate and permanent ban.",
+                "Use english only in all text channels",
                 "Use proper grammar and spelling and don't spam.",
                 "Usage of excessive extreme innapropriate langauge is prohibited.",
                 "Usage of excessive caps is prohibited",
