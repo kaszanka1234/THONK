@@ -66,7 +66,7 @@ namespace THONK.Core.Moderation{
                 await Context.Channel.SendMessageAsync(":x: Insufficient permissions");
                 return;
             }
-            await user.RemoveRoleAsync(Context.Guild.Roles.Where(x => x.Name.Contains("MR")).FirstOrDefault());
+            await user.RemoveRolesAsync((user as SocketGuildUser).Roles.Where(x => x.Name.Contains("MR")));
             await user.AddRoleAsync(Context.Guild.Roles.Where(x => x.Name == $"MR{rank}").FirstOrDefault());
             await Context.Channel.SendMessageAsync($"{(user.Nickname==null?user.Username:user.Nickname)} has been assigned MR{rank}");
         }
