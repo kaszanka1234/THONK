@@ -169,7 +169,7 @@ namespace THONK{
                 embed.WithColor(Color.LightOrange);
                 if(!msg.HasValue){
                     embed.Description = $"Message was edited in <#{channel.Id}> but i was unable to retrieve it";
-                }else{
+                }else if((await msg.GetOrDownloadAsync()).Embeds.First() != null){
                     embed.AddField("Before", msg.Value.ToString());
                     embed.AddField("After", msgAfter.ToString());
                     embed.WithAuthor(msg.Value.Author);

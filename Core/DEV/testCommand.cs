@@ -10,7 +10,7 @@ using THONK.Resources.Database;
 namespace THONK.DEV{
     /* test and developments commands won't be commented */
     public class testCommand : ModuleBase<SocketCommandContext>{
-        [Command("testCommand"), Summary("Development command")]
+        [Command("testCommand"), Alias("test"), Summary("Development command")]
         public async Task module(){
             await Context.Channel.SendMessageAsync("This is a test command");
         }
