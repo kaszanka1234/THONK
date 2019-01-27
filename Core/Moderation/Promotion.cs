@@ -74,6 +74,104 @@ namespace THONK.Core.Moderation{
         public async Task mr([Remainder]string str=""){
             await Context.Channel.SendMessageAsync("You have to specify rank eg. /user mr 15");
         }
+        [Command(""), Summary("")]
+        public async Task mr_alias([Remainder]string str=""){
+            switch (str){
+                case "mr1":
+                    await mr(1);
+                    break;
+                case "mr2":
+                    await mr(2);
+                    break;
+                case "mr3":
+                    await mr(3);
+                    break;
+                case "mr4":
+                    await mr(4);
+                    break;
+                case "mr5":
+                    await mr(5);
+                    break;
+                case "mr6":
+                    await mr(6);
+                    break;
+                case "mr7":
+                    await mr(7);
+                    break;
+                case "mr8":
+                    await mr(8);
+                    break;
+                case "mr9":
+                    await mr(9);
+                    break;
+                case "mr10":
+                    await mr(10);
+                    break;
+                case "mr11":
+                    await mr(11);
+                    break;
+                case "mr12":
+                    await mr(12);
+                    break;
+                case "mr13":
+                    await mr(13);
+                    break;
+                case "mr14":
+                    await mr(14);
+                    break;
+                case "mr15":
+                    await mr(15);
+                    break;
+                case "mr16":
+                    await mr(16);
+                    break;
+                case "mr17":
+                    await mr(17);
+                    break;
+                case "mr18":
+                    await mr(18);
+                    break;
+                case "mr19":
+                    await mr(19);
+                    break;
+                case "mr20":
+                    await mr(20);
+                    break;
+                case "mr21":
+                    await mr(21);
+                    break;
+                case "mr22":
+                    await mr(22);
+                    break;
+                case "mr23":
+                    await mr(23);
+                    break;
+                case "mr24":
+                    await mr(24);
+                    break;
+                case "mr25":
+                    await mr(25);
+                    break;
+                case "mr26":
+                    await mr(26);
+                    break;
+                case "mr27":
+                    await mr(27);
+                    break;
+                case "mr28":
+                    await mr(28);
+                    break;
+                case "mr29":
+                    await mr(29);
+                    break;
+                case "mr30":
+                    await mr(30);
+                    break;
+                default:
+                    break;
+            }
+        }
+
         [Command("kick"), Summary("Kick")]
             public async Task Kick(SocketGuildUser user,params string[] args){
                 bool force = false;
