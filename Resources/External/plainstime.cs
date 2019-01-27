@@ -12,13 +12,13 @@ namespace THONK.Resources.External{
             DateTime startOffset = new DateTime(2019,1,7,9,45,00);
             TimeSpan cetusCycle = DateTime.UtcNow - startOffset;
             int cycleSeconds = (int)cetusCycle.TotalSeconds%(150*60);
-            if(cycleSeconds<6000){
+            if(cycleSeconds<(99*60)){
                 _isDay=true;
                 cycleSeconds=99*60-cycleSeconds;
                 _minLeft=cycleSeconds/60;
             }else{
                 _isDay=false;
-                cycleSeconds=150*60-cycleSeconds;
+                cycleSeconds=149*60-cycleSeconds;
                 _minLeft=cycleSeconds/60;
             }
             cetusCycle = new TimeSpan(cycleSeconds*TimeSpan.TicksPerSecond);

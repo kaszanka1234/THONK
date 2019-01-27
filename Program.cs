@@ -153,7 +153,7 @@ namespace THONK{
                 }else{
                     embed.Description = msg.Value.ToString();
                     embed.WithAuthor(msg.Value.Author);
-                    embed.WithTimestamp(DateTimeOffset.Now);
+                    embed.WithTimestamp(DateTimeOffset.UtcNow);
                 }
                 await log.SendMessageAsync($"Message deleted in <#{channel.Id}>", false,embed);
             }
@@ -169,11 +169,11 @@ namespace THONK{
                 embed.WithColor(Color.LightOrange);
                 if(!msg.HasValue){
                     embed.Description = $"Message was edited in <#{channel.Id}> but i was unable to retrieve it";
-                }else{
+                }else if((await msg.GetOrDownloadAsync()).Embeds.First() != null){
                     embed.AddField("Before", msg.Value.ToString());
                     embed.AddField("After", msgAfter.ToString());
                     embed.WithAuthor(msg.Value.Author);
-                    embed.WithTimestamp(DateTimeOffset.Now);
+                    embed.WithTimestamp(DateTimeOffset.UtcNow);
                 }
                 await log.SendMessageAsync($"Message edited in <#{channel.Id}>", false,embed);
             }
@@ -182,7 +182,7 @@ namespace THONK{
         /* method executed after new user joins */
         private async Task _client_user_joined(SocketGuildUser User){
             var Channel = _client.GetChannel(THONK.Core.Data.GuildValues.Get.Channel.General(User.Guild.Id)) as SocketTextChannel;
-            await Channel.SendMessageAsync($"Hello <@{User.Id}>! Welcome on **{User.Guild.Name}** Please remember to read the rules and set your nickname here (right-click your name and 'change nickname') to the same as your warframe name");
+            await Channel.SendMessageAsync($"Hello <@{User.Id}>! Welcome on **{User.Guild.Name}** Please remember to read the rules and set your nickname here to the same as your warframe name (type '/nick \"your warframe name\")");
             ulong BotLog = THONK.Core.Data.GuildValues.Get.Channel.BotLog(User.Guild.Id);
             await (User as IGuildUser).AddRoleAsync((User as IGuildUser).Guild.Roles.Where(x => x.Name == "Visitor").FirstOrDefault());
             if(!(BotLog==0)){
