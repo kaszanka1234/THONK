@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -100,7 +101,7 @@ namespace THONK{
             _client.MessageUpdated += _client_MessageUpdated;
             /* execute method after new user joins guild */
             _client.UserJoined += _client_user_joined;
-            /* execute method after user lefts */
+            /* execute method after user leaves */
             _client.UserLeft += _client_user_left;
         }
 
@@ -142,7 +143,14 @@ namespace THONK{
         /* method executed after deleting message */
         private async Task _client_MessageDeleted(Cacheable<IMessage, ulong> msg, ISocketMessageChannel channel){
             if(msg.Value.Author.IsBot || msg.Value.Author.IsWebhook)return;
-            // TO-DO return if msg is cmd
+            /////////////////////////////////////////
+            // TO-DO return if msg is cmd deleted by bot
+            /* position of command prefix */
+            int ArgPos = 0;
+            string Prefix = THONK.Core.Data.GuildValues.Get.Pefix((channel as SocketGuildChannel).Guild.Id);
+            Prefix = Prefix.ToLower();
+            if((msg.Value as IUserMessage).HasStringPrefix(Prefix, ref ArgPos))return;
+            ////////////////////////////////////////
             var logChannelId = THONK.Core.Data.GuildValues.Get.Channel.Log((channel as SocketGuildChannel).Guild.Id);
             SocketTextChannel log = (channel as SocketTextChannel).Guild.GetTextChannel(logChannelId);
             if(logChannelId!=0){
@@ -162,6 +170,7 @@ namespace THONK{
         /* method executed after updating message */
         private async Task _client_MessageUpdated(Cacheable<IMessage, ulong> msg, SocketMessage msgAfter, ISocketMessageChannel channel){
             if(msg.Value.Author.IsBot || msg.Value.Author.IsWebhook)return;
+            // TO-DO return if automatically edited beause of link
             var logChannelId = THONK.Core.Data.GuildValues.Get.Channel.Log((channel as SocketGuildChannel).Guild.Id);
             SocketTextChannel log = (channel as SocketTextChannel).Guild.GetTextChannel(logChannelId);
             if(logChannelId!=0){
