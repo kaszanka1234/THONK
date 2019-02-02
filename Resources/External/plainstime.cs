@@ -9,7 +9,7 @@ namespace THONK.Resources.External{
         string _timeLeft;
         int _minLeft;
         public PlainsTime_obj(){
-            DateTime startOffset = new DateTime(2019,1,7,9,45,00);
+            DateTime startOffset = new DateTime(2019,1,7,9,40,00);
             TimeSpan cetusCycle = DateTime.UtcNow - startOffset;
             int cycleSeconds = (int)cetusCycle.TotalSeconds%(150*60);
             if(cycleSeconds<(99*60)){
