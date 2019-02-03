@@ -99,6 +99,8 @@ namespace THONK{
             _client.MessageReceived += _client_MessageRecieved;
             _client.MessageDeleted += _client_MessageDeleted;
             _client.MessageUpdated += _client_MessageUpdated;
+            _client.UserUpdated += _client_user_updated;
+            _client.GuildMemberUpdated += _client_user_updated;
             /* execute method after new user joins guild */
             _client.UserJoined += _client_user_joined;
             /* execute method after user leaves */
@@ -186,6 +188,44 @@ namespace THONK{
                 }
                 await log.SendMessageAsync($"Message edited in <#{channel.Id}>", false,embed);
             }
+        }
+
+        /* mwthod executed after user updates */
+        private async Task _client_user_updated(SocketUser before, SocketUser after){
+            ///////////////////////////////////////////////////////////////////////////////////////////
+            ///////////////////////////////////////////////////////////////////////////////////////////
+            ///////////////////////////////////////////////////////////////////////////////////////////
+            /////////////////////                                                 /////////////////////
+            /////////////////////      !!!! REMEMBER TO REMOVE TRY/CATCH !!!!     /////////////////////
+            /////////////////////                                                 /////////////////////
+            ///////////////////////////////////////////////////////////////////////////////////////////
+            ///////////////////////////////////////////////////////////////////////////////////////////
+            ///////////////////////////////////////////////////////////////////////////////////////////
+
+            
+            try{
+            if(before.Username!=after.Username){
+                foreach( IGuild guild in _client.Guilds){
+                    var channelId = THONK.Core.Data.GuildValues.Get.Channel.BotLog(guild.Id);
+                    if(channelId==0)continue;
+                    IGuildUser user = await guild.GetUserAsync(before.Id);
+                    if(user==null)continue;
+                    if(user.Nickname!=null)continue;
+                    var channel = await guild.GetTextChannelAsync(channelId);
+                    await channel.SendMessageAsync($"User ({before.Id}) changed username from {before.Username} to {after.Username}");
+                }
+            }else if((before as IGuildUser).Nickname!=(after as IGuildUser).Nickname){
+                var channelId = THONK.Core.Data.GuildValues.Get.Channel.BotLog( (before as IGuildUser).GuildId);
+                if(channelId!=0){
+                    var channel = await (before as IGuildUser).Guild.GetTextChannelAsync(channelId);
+                    string beforeNick = (before as IGuildUser).Nickname==null?"no nickname":$"'{(before as IGuildUser).Nickname}'";
+                    string afterNick = (after as IGuildUser).Nickname==null?"no nickname":$"'{(after as IGuildUser).Nickname}'";
+                    await channel.SendMessageAsync($"User ({before.Id}) changed nickname from {beforeNick} to {afterNick}");
+                }
+            }
+        }catch(Exception e){
+            Console.WriteLine(e.ToString());
+        }
         }
 
         /* method executed after new user joins */
