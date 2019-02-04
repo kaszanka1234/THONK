@@ -192,18 +192,6 @@ namespace THONK{
 
         /* mwthod executed after user updates */
         private async Task _client_user_updated(SocketUser before, SocketUser after){
-            ///////////////////////////////////////////////////////////////////////////////////////////
-            ///////////////////////////////////////////////////////////////////////////////////////////
-            ///////////////////////////////////////////////////////////////////////////////////////////
-            /////////////////////                                                 /////////////////////
-            /////////////////////      !!!! REMEMBER TO REMOVE TRY/CATCH !!!!     /////////////////////
-            /////////////////////                                                 /////////////////////
-            ///////////////////////////////////////////////////////////////////////////////////////////
-            ///////////////////////////////////////////////////////////////////////////////////////////
-            ///////////////////////////////////////////////////////////////////////////////////////////
-
-            
-            try{
             if(before.Username!=after.Username){
                 foreach( IGuild guild in _client.Guilds){
                     var channelId = THONK.Core.Data.GuildValues.Get.Channel.BotLog(guild.Id);
@@ -223,9 +211,6 @@ namespace THONK{
                     await channel.SendMessageAsync($"User ({before.Id}) changed nickname from {beforeNick} to {afterNick}");
                 }
             }
-        }catch(Exception e){
-            Console.WriteLine(e.ToString());
-        }
         }
 
         /* method executed after new user joins */
