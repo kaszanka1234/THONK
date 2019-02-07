@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace THONK.Resources.External{
-    public class Worldstate{
+    /*public class Worldstate{
         private class Sortie{
             
             _Mission _m1;
@@ -61,5 +61,5 @@ namespace THONK.Resources.External{
                 return await response.Content.ReadAsStringAsync();
             }
         }
-    }
+    }*/
 }
