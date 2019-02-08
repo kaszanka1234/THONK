@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
@@ -34,7 +35,7 @@ namespace THONK.Core.Moderation{
             string[] gRules = {
                 "All rulles that apply to discord also apply to in game chat",
                 "If you are inactive for more than 30 days you can be kicked out of clan, if you can't play for extended period of time contact any officer or higher",
-                "To reach the rank of soldier in clan you have to be at least MR3 and be a member of the clan for at least 2 days, if you are inactive in these 2 days you can be kicked out",
+                "To reach the rank of soldier in clan you have to be at least MR3 and be a member of the clan for at least 5 days, if you are inactive you can be kicked out",
                 "Higher ranks are given by the highest ranked members of the clan as they are needed, don't ask for a higher rank unless you have a good reason for it"
             };
             foreach (EmbedBuilder builder in builders){
@@ -61,7 +62,7 @@ namespace THONK.Core.Moderation{
             //await Context.Channel.SendMessageAsync("As a fallback you can message me with \"rules\" to get rules in text-only format");
             for(int i=0;i<builders.Length;i++){
                 await Context.Channel.SendMessageAsync("",false, builders[i]);
-                await Task.Delay(1000);
+                await Task.Delay(2500);
             }
         }
         [Command("ranks"), Alias("ranks list", "rank list")]
@@ -98,8 +99,26 @@ namespace THONK.Core.Moderation{
             builders[7].Description += "Newcommers on the server";
             foreach (EmbedBuilder builder in builders){
                 await Context.Channel.SendMessageAsync("",false,builder);
-                await Task.Delay(1000);
+                await Task.Delay(2500);
             }
+        }
+
+        [Command("sguide")]
+        public async Task SGuide(){
+            if(!(Context.User as SocketGuildUser).GuildPermissions.Administrator){
+                await Context.Channel.SendMessageAsync(":x: Insufficient permissions");
+                return;
+            }
+            EmbedBuilder embed = new EmbedBuilder();
+            embed.WithAuthor(Context.Guild.GetUser(333769079569776642));
+            embed.WithFooter("Last updated");
+            embed.WithCurrentTimestamp();
+            embed.AddField("​",$"as a {Context.Guild.Roles.Where(x => x.Name=="Lieutenant").First().Mention} you can promote other members and moderate discord and in game chat\nYou can promote initiates to soldiers once they meet requirements");
+            embed.AddField("​",$"as s {Context.Guild.Roles.Where(x => x.Name=="Sergeant").First().Mention} you can recruit new people and and approve new members once they meet requirements, you can also queue new research in labs\nBefore approving someone with '/user aprove @user' make sure they have correct nickname on discord and actually joined clan");
+            embed.AddField("​",$"Don't recruit every random person, go through a recruitment process with everyone, preferably on voice channel. You can use questions included in <#543400258294644766>\nI trust YOUR judgement to decide if given person is going to end up as leech or not");
+            embed.AddField("​",$"if you are incompetent or abusive you will be stripped of your rank");
+            embed.AddField("​",$"use this link to invite new members to discord\nhttps://discord.gg/kv74E4C");
+            await Context.Channel.SendMessageAsync("",false,embed);
         }
     }
 }
