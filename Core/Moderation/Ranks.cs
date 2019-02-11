@@ -8,7 +8,7 @@ using THONK.Core.Data.GuildValues;
 
 namespace THONK.Core.Moderation{
     [Group("user"), Summary("Changes user's role")]
-    public class Promotion : ModuleBase<SocketCommandContext>{
+    public class Ranks : ModuleBase<SocketCommandContext>{
         
         [Command("approve"), Alias("accept"), Summary("Changes user's role from Visitor to initiate (Sergeant)")]
         public async Task approve(SocketGuildUser UserName){
@@ -31,28 +31,42 @@ namespace THONK.Core.Moderation{
                 await User.Guild.GetTextChannel(BotLog).SendMessageAsync($"<@{UserName.Id}> (*{UserNickname}*, {UserName.Id} was approved by **{StaffNickname}**");
             }
         }
-        [Group("promote"), Summary("Promotes user to higher rank")]
-        public class Promote : ModuleBase<SocketCommandContext>{
-            [Command("soldier"), Summary("Promote member to soldier (Lieutenant)")]
-            public async Task soldier(SocketGuildUser UserName){
-                var User = Context.User as SocketGuildUser;
-                if(!THONK.Core.Data.GuildValues.User.HasHigherRole((User as SocketGuildUser), "Lieutenant")){
-                    await Context.Channel.SendMessageAsync(":x: Insufficiet permissions");
-                    return;
-                }else if(!THONK.Core.Data.GuildValues.User.HasHigherRole((UserName as SocketGuildUser), "Initiate")){
-                    await Context.Channel.SendMessageAsync(":x: Cannot perform operation on given user");
-                    return;
-                }
-                await (UserName as IGuildUser).AddRoleAsync(Context.Guild.Roles.Where(x => x.Name == "Soldier").FirstOrDefault());
-                await (UserName as IGuildUser).RemoveRoleAsync(Context.Guild.Roles.Where(x => x.Name == "Initiate").FirstOrDefault());
-                string UserNickname = (UserName as IGuildUser).Nickname==null?UserName.Username:(UserName as IGuildUser).Nickname;
-                string message = $"**{UserNickname}** has been promoted to a rank of soldier";
-                await Context.Guild.TextChannels.Where(x => x.Id == Get.Channel.General(Context.Guild.Id)).FirstOrDefault().SendMessageAsync(message);
+        [Command("rank"), Summary("Promotes user to higher rank")]
+        public async Task Rank(SocketGuildUser UserName, string rank){
+            var User = Context.User as SocketGuildUser;
+            if(!THONK.Core.Data.GuildValues.User.HasHigherRole((User as SocketGuildUser), "Lieutenant")){
+                await Context.Channel.SendMessageAsync(":x: Insufficiet permissions");
+                return;
             }
+            IRole role;
+            switch(rank){
+                case "guest":
+                    //
+                    break;
+                case "soldier":
+                    //
+                    break;
+                case "":
+                    //
+                    break;
+                default:
+                    //
+                    break;
+            }
+            await (UserName as IGuildUser).AddRoleAsync(Context.Guild.Roles.Where(x => x.Name == "Soldier").FirstOrDefault());
+            await (UserName as IGuildUser).RemoveRoleAsync(Context.Guild.Roles.Where(x => x.Name == "Initiate").FirstOrDefault());
+            string UserNickname = (UserName as IGuildUser).Nickname==null?UserName.Username:(UserName as IGuildUser).Nickname;
+            string message = $"**{UserNickname}** has been promoted to a rank of soldier";
+            await Context.Guild.TextChannels.Where(x => x.Id == Get.Channel.General(Context.Guild.Id)).FirstOrDefault().SendMessageAsync(message);
         }
-        [Group("demote"), Summary("Demotes user to lower rank")]
-        public class demote : ModuleBase<SocketCommandContext>{
-            // TODO
+        [Command("rank"), Summary("Promotes user to higher rank")]
+        public async Task Rank([Remainder]string str){
+            var User = Context.User as SocketGuildUser;
+            if(!THONK.Core.Data.GuildValues.User.HasHigherRole((User as SocketGuildUser), "Lieutenant")){
+                await Context.Channel.SendMessageAsync(":x: Insufficiet permissions");
+                return;
+            }
+            await Context.Channel.SendMessageAsync("correct usage is /user rank @user (rank)");
         }
         [Command("mastery rank"), Alias("mr"), Summary("Set user mr")]
         public async Task mr(int rank, IGuildUser user = null){
