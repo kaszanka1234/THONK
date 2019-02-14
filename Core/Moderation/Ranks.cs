@@ -34,10 +34,6 @@ namespace THONK.Core.Moderation{
         }
         [Command("rank"), Summary("Promotes user to higher rank")]
         public async Task Rank(string rank, SocketGuildUser UserName=null){
-<<<<<<< HEAD
-=======
-            try{
->>>>>>> 7887edd292cc80acd4909b67afaddd277e96cc2f
             if(UserName==null){UserName=Context.User as SocketGuildUser;}
             SocketGuildUser User = Context.User as SocketGuildUser;
             if(THONK.Core.Data.GuildValues.User.HasHigherRole(UserName,"Warlord")){
@@ -91,22 +87,12 @@ namespace THONK.Core.Moderation{
                 await (UserName as IGuildUser).RemoveRolesAsync(rolesToRemove);
                 await (UserName as IGuildUser).AddRoleAsync(role);
                 string UserNickname = (UserName as IGuildUser).Nickname==null?UserName.Username:(UserName as IGuildUser).Nickname;
-<<<<<<< HEAD
                 string message = $"**{UserNickname}** has been assigned rank of {rank}";
                 await Context.Guild.TextChannels.Where(x => x.Id == Get.Channel.General(Context.Guild.Id)).FirstOrDefault().SendMessageAsync(message);
             }else{
                 await Context.Channel.SendMessageAsync("Correct roles include Guest, Soldier");
             } 
-=======
-                string message = $"**{UserNickname}** has been promoted to a rank of soldier";
-                await Context.Guild.TextChannels.Where(x => x.Id == Get.Channel.General(Context.Guild.Id)).FirstOrDefault().SendMessageAsync(message);
-            }else{
 
-            }
-            }catch(Exception e){
-                Console.WriteLine(e.ToString());
-            }   
->>>>>>> 7887edd292cc80acd4909b67afaddd277e96cc2f
         }
         void YouCannotDoThat(ISocketMessageChannel ch){
             ch.SendMessageAsync(":x: You cannot do that");
