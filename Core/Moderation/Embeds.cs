@@ -29,7 +29,8 @@ namespace THONK.Core.Moderation{
                 "Don't post any material forbidden by international laws",
                 "If you are offline on discord for more than 7 days you can be kicked out of clan. If you can't login for an extended period of time contact any officer or higher.",
                 "Please use the same name that you use in-game. Do not use fake nickname.",
-                "E",
+                "You can invite others to discord with this link https://discord.gg/kv74E4C",
+                "Everyone who doesn't plan to join clan should get a rank of guest (/user rank guest)",
                 "NO advertising of any kind on our Discord server, This includes links to sites that earn you money. Admins decide what is allowed and what is not. DONT asume anything check with an admin first.",
                 "No rules apply to <#514901753863340054>, aside from 'Don't post any material forbidden by international laws'"
             };
