@@ -9,16 +9,16 @@ namespace THONK.Resources.External{
         string _timeLeft;
         int _minLeft;
         public PlainsTime_obj(){
-            DateTime startOffset = new DateTime(2019,1,7,9,40,00);
+            DateTime startOffset = new DateTime(2019,2,17,15,38,20);
             TimeSpan cetusCycle = DateTime.UtcNow - startOffset;
             int cycleSeconds = (int)cetusCycle.TotalSeconds%(150*60);
-            if(cycleSeconds<(99*60)){
+            if(cycleSeconds<(100*60)){
                 _isDay=true;
-                cycleSeconds=99*60-cycleSeconds;
+                cycleSeconds=100*60-cycleSeconds;
                 _minLeft=cycleSeconds/60;
             }else{
                 _isDay=false;
-                cycleSeconds=149*60-cycleSeconds;
+                cycleSeconds=150*60-cycleSeconds;
                 _minLeft=cycleSeconds/60;
             }
             cetusCycle = new TimeSpan(cycleSeconds*TimeSpan.TicksPerSecond);
