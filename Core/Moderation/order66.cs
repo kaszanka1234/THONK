@@ -39,7 +39,7 @@ namespace THONK.Core.Commands.Moderation{
                 }
                 private async Task kick(List<SocketGuildUser> users){
                     users.ForEach(async x =>{
-                        await Task.Delay(5000);
+                        System.Threading.Thread.Sleep(5000);
                         string msg = $"{x.Mention} has been executed";
                         await Context.Channel.SendMessageAsync(msg);
                         await x.KickAsync();
