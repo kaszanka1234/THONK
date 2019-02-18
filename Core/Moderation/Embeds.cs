@@ -32,7 +32,8 @@ namespace THONK.Core.Moderation{
                 "You can invite others to discord with this link https://discord.gg/kv74E4C",
                 "Everyone who doesn't plan to join clan should get a rank of guest (/user rank guest)",
                 "NO advertising of any kind on our Discord server, This includes links to sites that earn you money. Admins decide what is allowed and what is not. DONT asume anything check with an admin first.",
-                "No rules apply to <#514901753863340054>, aside from 'Don't post any material forbidden by international laws'"
+                "No rules apply to <#514901753863340054>, aside from 'Don't post any material forbidden by international laws'",
+                "Most warnings will be sent by bot in private messages, having private messages disabled is not an excuse for ignoring them"
             };
             string[] gRules = {
                 "All rulles that apply to discord also apply to in game chat",
