@@ -7,7 +7,7 @@ using Discord.Commands;
 using Discord.WebSocket;
 
 namespace THONK.Core.Commands.Moderation{
-    public class Order66 : ModuleBase<SocketCommandContext>{
+    /*public class Order66 : ModuleBase<SocketCommandContext>{
         [Group("execute")]
         public class Execute : ModuleBase<SocketCommandContext>{
             [Group("order")]
@@ -55,5 +55,5 @@ namespace THONK.Core.Commands.Moderation{
                 }
             }
         }
-    }
+    }*/
 }
