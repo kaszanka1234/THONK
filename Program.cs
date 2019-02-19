@@ -109,11 +109,17 @@ namespace THONK{
 
         /* set rich presence properties */
         private async Task _update_game(){
-            /* update status each minute */
+            /* check time each 5 seconds and update status each minute */
+            int minLeft = 0;
+            bool day = false;
             while(true){
                 var cet = new THONK.Resources.External.PlainsTime_obj();
-                await _client.SetGameAsync($"{cet.GetMinLeft()}m to {(!cet.GetIsDay()?"day":"night")}");
-                await Task.Delay(60000);
+                if(minLeft!=cet.GetMinLeft()||day!=cet.GetIsDay()){
+                    minLeft = cet.GetMinLeft();
+                    day = cet.GetIsDay();
+                    await _client.SetGameAsync($"{cet.GetMinLeft()}m to {(!cet.GetIsDay()?"day":"night")}");
+                }
+                await Task.Delay(5000);
             }
         }
 
