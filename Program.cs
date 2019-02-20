@@ -119,7 +119,7 @@ namespace THONK{
                     day = cet.GetIsDay();
                     await _client.SetGameAsync($"{cet.GetMinLeft()}m to {(!cet.GetIsDay()?"day":"night")}");
                 }
-                await Task.Delay(5000);
+                await Task.Delay(2500);
             }
         }
 
