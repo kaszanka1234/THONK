@@ -150,6 +150,7 @@ namespace THONK{
 
         /* method executed after deleting message */
         private async Task _client_MessageDeleted(Cacheable<IMessage, ulong> msg, ISocketMessageChannel channel){
+            if(!msg.HasValue)return; // this is so broken but i don't care
             if(msg.Value.Author.IsBot || msg.Value.Author.IsWebhook)return;
             /////////////////////////////////////////
             // TO-DO return if msg is cmd deleted by bot
