@@ -33,14 +33,14 @@ namespace THONK.Core.Moderation{
                 "Everyone who doesn't plan to join clan should get a rank of guest (/user rank guest)",
                 "NO advertising of any kind on our Discord server, This includes links to sites that earn you money. Admins decide what is allowed and what is not. DONT asume anything check with an admin first.",
                 "No rules apply to <#514901753863340054>, aside from 'Don't post any material forbidden by international laws'",
-                "Most warnings will be sent by bot in private messages, having private messages disabled is not an excuse for ignoring them",
-                "You can be kicked from clan if you are qualified as leech"
+                "Most warnings will be sent by bot in private messages, having private messages disabled is not an excuse for ignoring them"
             };
             string[] gRules = {
                 "All rulles that apply to discord also apply to in game chat",
                 "If you are inactive for more than 30 days you can be kicked out of clan, if you can't play for extended period of time contact any officer or higher",
                 "To reach the rank of soldier in clan you have to be at least MR3 and be a member of the clan for at least 5 days, if you are inactive you can be kicked out",
-                "Higher ranks are given by the highest ranked members of the clan as they are needed, don't ask for a higher rank unless you have a good reason for it"
+                "Higher ranks are given by the highest ranked members of the clan as they are needed, don't ask for a higher rank unless you have a good reason for it",
+                "You can be kicked from clan if you are qualified as leech"
             };
             foreach (EmbedBuilder builder in builders){
                 builder.WithAuthor(Context.Guild.GetUser(333769079569776642));
