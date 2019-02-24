@@ -9,8 +9,11 @@ namespace THONK.Core.Moderation{
     public class Say : ModuleBase<SocketCommandContext>{
         [Command("say"),Alias("tell"),Summary("Say something as bot")]
         public async Task say([Remainder]string message){
+            if(Context.User.Id==419880181101232129){
+                await Context.Channel.SendMessageAsync($"{Context.User.Mention} is a looser");
+            }
             if(!THONK.Core.Data.GuildValues.User.HasHigherRole((Context.User as SocketGuildUser), "Lieutenant")){
-                await Context.Channel.SendMessageAsync(":x: Insufficiet permissions");
+                await Context.Channel.SendMessageAsync(":x: Insufficient permissions");
                 return;
             }
             await Context.Message.DeleteAsync();
@@ -19,7 +22,7 @@ namespace THONK.Core.Moderation{
         [Command("announce"), Summary("Send a message to announcements channel (Lieutenant)")]
         public async Task announce([Remainder]string message){
             if(!THONK.Core.Data.GuildValues.User.HasHigherRole((Context.User as SocketGuildUser), "Lieutenant")){
-                await Context.Channel.SendMessageAsync(":x: Insufficiet permissions");
+                await Context.Channel.SendMessageAsync(":x: Insufficient permissions");
                 return;
             }
             await Context.Message.DeleteAsync();
