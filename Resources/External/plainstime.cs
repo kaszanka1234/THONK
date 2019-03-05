@@ -9,8 +9,9 @@ namespace THONK.Resources.External{
         string _timeLeft;
         int _minLeft;
         public PlainsTime_obj(){
+            const int calibration = 35;
             const double cycleTime = 8998.8748;
-            DateTime startOffset = new DateTime(2019,2,17,15,38,35);
+            DateTime startOffset = new DateTime(2019, 2, 17, 16, 38, 40).AddSeconds(calibration);
             TimeSpan cetusCycle = DateTime.UtcNow - startOffset;
             int cycleSeconds = (int)(cetusCycle.TotalSeconds%cycleTime);
             if(cycleSeconds<(cycleTime*2/3)){
