@@ -223,7 +223,11 @@ namespace THONK{
         /* method executed after new user joins */
         private async Task _client_user_joined(SocketGuildUser User){
             var Channel = _client.GetChannel(THONK.Core.Data.GuildValues.Get.Channel.General(User.Guild.Id)) as SocketTextChannel;
-            await Channel.SendMessageAsync($"Hello <@{User.Id}>! Welcome on **{User.Guild.Name}** Please remember to read the rules and set your nickname here to the same as your warframe name (type '/nick \"your warframe name\")");
+            if(User.Id==367742514288918529){
+                await Channel.SendMessageAsync($"Notices {User.Mention} OwO whats this? Rawr x3 nuzzles how are you pounces on you you're so warm o3o");
+            }else{
+                await Channel.SendMessageAsync($"Hello <@{User.Id}>! Welcome on **{User.Guild.Name}** Please remember to read the rules and set your nickname here to the same as your warframe name (type '/nick \"your warframe name\")");
+            }
             ulong BotLog = THONK.Core.Data.GuildValues.Get.Channel.BotLog(User.Guild.Id);
             await (User as IGuildUser).AddRoleAsync((User as IGuildUser).Guild.Roles.Where(x => x.Name == "Visitor").FirstOrDefault());
             if(!(BotLog==0)){
